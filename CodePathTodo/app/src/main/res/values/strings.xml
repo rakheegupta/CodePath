@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CodePathTodo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_add">Add</string>
+    <string name="EditText_Hint">Add a new item</string>
+</resources>
