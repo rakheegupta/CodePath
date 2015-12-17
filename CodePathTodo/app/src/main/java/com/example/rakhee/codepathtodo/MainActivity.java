@@ -3,6 +3,7 @@ package com.example.rakhee.codepathtodo;
 import android.app.Activity;
 import android.app.Notification;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -39,6 +40,8 @@ public class MainActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
+
+        getWindow().setStatusBarColor(Color.parseColor("#43B3C4"));
 
         populateArrayItems();
 

@@ -1,6 +1,7 @@
 package com.example.rakhee.codepathtodo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
@@ -19,6 +20,9 @@ public class EditActivity extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setActionBar(toolbar);
+
+        getWindow().setStatusBarColor(Color.parseColor("#43B3C4"));
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
