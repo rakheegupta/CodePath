@@ -26,12 +26,12 @@ public class MainActivity extends ActionBarActivity {
     public final static String EXTRA_EDIT_MESSAGE = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_MESSAGE";
     public final static String EXTRA_EDIT_RESULT = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_RESULT";
     public final static int EDIT_MESSAGE_REQUEST_CODE = 27;
+    public final static int Add_MESSAGE_REQUEST_CODE = 37;
 
     private int mPositonPendingEdit;
 
     private ArrayList<String> mTodoItems;
     private ArrayAdapter<String> mTodoAdapter;
-    private EditText mEtAddItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,6 @@ public class MainActivity extends ActionBarActivity {
         getWindow().setStatusBarColor(Color.parseColor("#43B3C4"));
 
         populateArrayItems();
-
-        mEtAddItem = (EditText) findViewById(R.id.etAdd);
 
         ListView lvItems = (ListView)findViewById(R.id.lvItems);
         lvItems.setAdapter(mTodoAdapter);
@@ -77,12 +75,15 @@ public class MainActivity extends ActionBarActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
                 mTodoItems.set(mPositonPendingEdit, data.getStringExtra(EXTRA_EDIT_RESULT));
                 mTodoAdapter.notifyDataSetChanged();
-                writeItems();
             }
+            else if (requestCode == Add_MESSAGE_REQUEST_CODE) {
+                mTodoAdapter.add(data.getStringExtra(EXTRA_EDIT_RESULT));
+            }
+            writeItems();
         }
     }
 
@@ -135,9 +136,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onAddItem(View view) {
-        mTodoAdapter.add(mEtAddItem.getText().toString());
-        mEtAddItem.setText("");
-        writeItems();
+    public void onAddClicked(View view) {
+        Intent intent = new Intent(this, EditActivity.class);
+        startActivityForResult(intent, Add_MESSAGE_REQUEST_CODE);
     }
+
 }

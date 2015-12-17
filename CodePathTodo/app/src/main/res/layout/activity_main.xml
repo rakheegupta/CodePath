@@ -1,41 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context=".MainActivity">
 
 
-    <Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:minHeight="?android:attr/actionBarSize"
-        android:background="#43B3C4"
-        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
-        android:popupTheme="@android:style/ThemeOverlay.Material.Light" />
+        android:layout_height="match_parent">
+        <Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:minHeight="?android:attr/actionBarSize"
+            android:background="#43B3C4"
+            android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
+            android:popupTheme="@android:style/ThemeOverlay.Material.Light" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_add"
-        android:id="@+id/btnAdd"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:hint="@string/EditText_Hint"
-        android:onClick="onAddItem"/>
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvItems"
+            android:layout_below="@id/toolbar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/add_64"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:onClick="onAddClicked"/>
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvItems"
-        android:layout_above="@+id/btnAdd"
-        android:layout_below="@id/toolbar"/>
+    </RelativeLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/etAdd"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/btnAdd" />
-</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

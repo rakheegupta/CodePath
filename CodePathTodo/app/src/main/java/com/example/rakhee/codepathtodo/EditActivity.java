@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 public class EditActivity extends ActionBarActivity {
@@ -31,10 +32,19 @@ public class EditActivity extends ActionBarActivity {
             }
         });
 
-        String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
-
         etEdit = (EditText) findViewById(R.id.etEdit);
-        etEdit.setText(message);
+        
+        String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
+        if (message != null) {
+            etEdit.setText(message);
+        }
+        else {
+            // This is add activity
+            toolbar.setTitle(getString(R.string.add_item_title));
+
+            TextView tvHeader = (TextView) findViewById(R.id.textView);
+            tvHeader.setText(getString(R.string.add_item_header));
+        }
     }
 
     public void onSaveClicked(View view) {
