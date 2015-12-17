@@ -3,10 +3,12 @@ package com.example.rakhee.codepathtodo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toolbar;
 
-public class EditActivity extends Activity {
+public class EditActivity extends ActionBarActivity {
 
     private EditText etEdit;
 
@@ -14,7 +16,9 @@ public class EditActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setActionBar(toolbar);
 
         String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
 
