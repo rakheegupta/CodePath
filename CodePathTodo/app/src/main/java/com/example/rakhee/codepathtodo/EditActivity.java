@@ -33,14 +33,14 @@ public class EditActivity extends ActionBarActivity {
         });
 
         etEdit = (EditText) findViewById(R.id.etEdit);
-        
+
         String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
         if (message != null) {
             etEdit.setText(message);
         }
         else {
             // This is add activity
-            toolbar.setTitle(getString(R.string.add_item_title));
+            getActionBar().setTitle(getString(R.string.add_item_title));
 
             TextView tvHeader = (TextView) findViewById(R.id.textView);
             tvHeader.setText(getString(R.string.add_item_header));
