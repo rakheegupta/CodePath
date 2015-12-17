@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
             if (resultCode == Activity.RESULT_OK) {
                 mTodoItems.set(mPositonPendingEdit, data.getStringExtra(EXTRA_EDIT_RESULT));
                 mTodoAdapter.notifyDataSetChanged();
+                writeItems();
             }
         }
     }
