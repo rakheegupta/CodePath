@@ -1,6 +1,7 @@
 package com.example.rakhee.codepathtodo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
+    public final static String EXTRA_EDIT_MESSAGE = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_MESSAGE";
+    public final static String EXTRA_EDIT_RESULT = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_RESULT";
+    public final static int EDIT_MESSAGE_REQUEST_CODE = 27;
+
+    private int mPositonPendingEdit;
+
     private ArrayList<String> mTodoItems;
     private ArrayAdapter<String> mTodoAdapter;
     private EditText mEtAddItem;
@@ -32,6 +39,7 @@ public class MainActivity extends Activity {
 
         ListView lvItems = (ListView)findViewById(R.id.lvItems);
         lvItems.setAdapter(mTodoAdapter);
+
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -42,6 +50,29 @@ public class MainActivity extends Activity {
             }
         });
 
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mPositonPendingEdit = position;
+
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
+                startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                mTodoItems.set(mPositonPendingEdit, data.getStringExtra(EXTRA_EDIT_RESULT));
+                mTodoAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     private void populateArrayItems() {
