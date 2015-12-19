@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
     private int mPositonPendingEdit;
 
     private ArrayList<String> mTodoItems;
-    private ArrayAdapter<String> mTodoAdapter;
+    private ListViewAdapter mTodoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,7 @@ public class MainActivity extends ActionBarActivity {
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                mTodoItems.remove(position);
-                mTodoAdapter.notifyDataSetChanged();
-                writeItems();
+                onDeleteItem(position);
                 return true;
             }
         });
@@ -61,14 +59,23 @@ public class MainActivity extends ActionBarActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mPositonPendingEdit = position;
-
-                Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
-                startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
+                onItemClicked(position);
             }
         });
+    }
 
+    public void onItemClicked(int position) {
+        mPositonPendingEdit = position;
+
+        Intent intent = new Intent(MainActivity.this, EditActivity.class);
+        intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
+        startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
+    }
+
+    public void onDeleteItem(int position) {
+        mTodoItems.remove(position);
+        mTodoAdapter.notifyDataSetChanged();
+        writeItems();
     }
 
     @Override
@@ -89,7 +96,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void populateArrayItems() {
         readItems();
-        mTodoAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mTodoItems);
+        mTodoAdapter = new ListViewAdapter(this, mTodoItems);
     }
 
     private void readItems() {

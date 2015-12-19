@@ -32,10 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/add_64"
+            android:src="@drawable/add_128"
             android:layout_margin="16dp"
             android:clickable="true"
-            android:onClick="onAddClicked"/>
+            android:onClick="onAddClicked" />
 
     </RelativeLayout>
 

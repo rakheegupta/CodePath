@@ -24,4 +24,5 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile "com.android.support:appcompat-v7:22.2.+"
     compile "com.android.support:design:22.2.+"
+    compile "com.daimajia.swipelayout:library:1.1.8@aar"
 }
