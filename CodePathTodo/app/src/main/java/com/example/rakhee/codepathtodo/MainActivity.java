@@ -30,8 +30,13 @@ public class MainActivity extends ActionBarActivity {
 
     private int mPositonPendingEdit;
 
-    private ArrayList<String> mTodoItems;
+    private ArrayList<Item> mTodoItems;
     private ListViewAdapter mTodoAdapter;
+
+    public boolean mInEditMode;
+
+    MenuItem mMenuEdit;
+    MenuItem mMenuDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class MainActivity extends ActionBarActivity {
         setActionBar(toolbar);
 
         getWindow().setStatusBarColor(Color.parseColor("#43B3C4"));
+
+        mInEditMode = false;
 
         populateArrayItems();
 
@@ -68,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
         mPositonPendingEdit = position;
 
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
-        intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
+        intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit).mText);
         startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
 
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
@@ -86,11 +93,14 @@ public class MainActivity extends ActionBarActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
-                mTodoItems.set(mPositonPendingEdit, data.getStringExtra(EXTRA_EDIT_RESULT));
+                mTodoItems.get(mPositonPendingEdit).mText = data.getStringExtra(EXTRA_EDIT_RESULT);
                 mTodoAdapter.notifyDataSetChanged();
             }
             else if (requestCode == Add_MESSAGE_REQUEST_CODE) {
-                mTodoAdapter.add(data.getStringExtra(EXTRA_EDIT_RESULT));
+                Item newItem = new Item();
+                newItem.mText = data.getStringExtra(EXTRA_EDIT_RESULT);
+                newItem.mIsSelected = false;
+                mTodoAdapter.add(newItem);
             }
             writeItems();
         }
@@ -104,11 +114,18 @@ public class MainActivity extends ActionBarActivity {
     private void readItems() {
         File fileDir = getFilesDir();
         File file = new File(fileDir, "todo.txt");
+        mTodoItems = new ArrayList<>();
         try{
-            mTodoItems = new ArrayList<>(FileUtils.readLines(file));
+            ArrayList<String> items = new ArrayList<>(FileUtils.readLines(file));
+            for (String text: items) {
+                Item item = new Item();
+                item.mText = text;
+                item.mIsSelected = false;
+                mTodoItems.add(item);
+            }
         }
         catch (Exception ex){
-            mTodoItems = new ArrayList<>();
+
         }
     }
 
@@ -116,7 +133,11 @@ public class MainActivity extends ActionBarActivity {
         File fileDir = getFilesDir();
         File file = new File(fileDir, "todo.txt");
         try{
-            FileUtils.writeLines(file, mTodoItems);
+            ArrayList<String> items = new ArrayList<>();
+            for (Item item: mTodoItems) {
+                items.add(item.mText);
+            }
+            FileUtils.writeLines(file, items);
         }
         catch (Exception ex){
 
@@ -125,15 +146,73 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        System.out.println("onCreateOptionsMenu");
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        mMenuEdit = menu.findItem(R.id.edit);
+        mMenuDelete = menu.findItem(R.id.delete);
+
+        boolean somethingSelected = false;
+        for (Item item: mTodoItems) {
+            if (item.mIsSelected) {
+                somethingSelected = true;
+                break;
+            }
+        }
+
+        mMenuEdit.setVisible(!somethingSelected);
+        mMenuDelete.setVisible(somethingSelected);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        int id = menuItem.getItemId();
+        if (id == R.id.edit) {
+            mInEditMode = !mInEditMode;
+            mTodoAdapter.notifyDataSetChanged();
+        }
+        else if (id == R.id.delete) {
+            for (int i = mTodoItems.size() - 1; i >= 0; i--) {
+                Item item = mTodoItems.get(i);
+                if(item.mIsSelected) {
+                    mTodoItems.remove(i);
+                }
+            }
+            mTodoAdapter.notifyDataSetChanged();
+            mInEditMode = false;
+            mMenuEdit.setVisible(true);
+            mMenuDelete.setVisible(false);
+            writeItems();
+        }
+
+        return super.onOptionsItemSelected(menuItem);
     }
 
     public void onAddClicked(View view) {
         Intent intent = new Intent(this, EditActivity.class);
         startActivityForResult(intent, Add_MESSAGE_REQUEST_CODE);
         overridePendingTransition(R.anim.enter_from_bottom, R.anim.stay_in_place);
+    }
+
+    public void onRefreshMenu() {
+        System.out.println("Calling invalidateOptionsMenu");
+        invalidateOptionsMenu();
+
+        boolean somethingSelected = false;
+        for (Item item: mTodoItems) {
+            if (item.mIsSelected) {
+                somethingSelected = true;
+                break;
+            }
+        }
+
+        mMenuEdit.setVisible(!somethingSelected);
+        mMenuDelete.setVisible(somethingSelected);
     }
 
 }

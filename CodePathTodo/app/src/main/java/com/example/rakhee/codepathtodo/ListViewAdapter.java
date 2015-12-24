@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,11 +19,11 @@ import java.util.List;
 /**
  * Created by Rakhee on 12/18/2015.
  */
-public class ListViewAdapter extends ArrayAdapter<String> {
+public class ListViewAdapter extends ArrayAdapter<Item> {
 
-    ArrayList<String> mTodoItems;
+    ArrayList<Item> mTodoItems;
 
-    public ListViewAdapter(Context context, ArrayList<String> items) {
+    public ListViewAdapter(Context context, ArrayList<Item> items) {
         super(context, R.layout.list_item, items);
         mTodoItems = items;
     }
@@ -73,13 +74,28 @@ public class ListViewAdapter extends ArrayAdapter<String> {
         llDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getContext()).onDeleteItem(position);
+                ((MainActivity) getContext()).onDeleteItem(position);
             }
         });
 
-        String item = getItem(position);
+        String item = getItem(position).mText;
         TextView tvItem = (TextView) view.findViewById(R.id.tvItem);
         tvItem.setText(item);
+
+        final CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBox);
+        if (((MainActivity)getContext()).mInEditMode) {
+                checkBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            checkBox.setVisibility(View.GONE);
+        }
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getItem(position).mIsSelected = checkBox.isChecked();
+                ((MainActivity)getContext()).onRefreshMenu();
+            }
+        });
 
         return view;
     }
