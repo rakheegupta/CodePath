@@ -70,6 +70,8 @@ public class MainActivity extends ActionBarActivity {
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
         intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
         startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
+
+        overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
     }
 
     public void onDeleteItem(int position) {
@@ -131,6 +133,7 @@ public class MainActivity extends ActionBarActivity {
     public void onAddClicked(View view) {
         Intent intent = new Intent(this, EditActivity.class);
         startActivityForResult(intent, Add_MESSAGE_REQUEST_CODE);
+        overridePendingTransition(R.anim.enter_from_bottom, R.anim.stay_in_place);
     }
 
 }

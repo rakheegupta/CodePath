@@ -13,6 +13,7 @@ import android.widget.Toolbar;
 public class EditActivity extends ActionBarActivity {
 
     private EditText etEdit;
+    private boolean mIsAddNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,9 @@ public class EditActivity extends ActionBarActivity {
         etEdit = (EditText) findViewById(R.id.etEdit);
 
         String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
-        if (message != null) {
+        mIsAddNew = (message == null);
+
+        if (!mIsAddNew) {
             etEdit.setText(message);
         }
         else {
@@ -53,5 +56,12 @@ public class EditActivity extends ActionBarActivity {
         resultIntent.putExtra(MainActivity.EXTRA_EDIT_RESULT, etEdit.getText().toString());
         setResult(RESULT_OK, resultIntent);
         finish();
+
+        if (mIsAddNew) {
+            overridePendingTransition(R.anim.stay_in_place, R.anim.exit_to_bottom);
+        }
+        else {
+            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
+        }
     }
 }
