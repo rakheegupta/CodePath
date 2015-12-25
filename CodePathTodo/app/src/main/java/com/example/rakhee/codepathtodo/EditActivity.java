@@ -1,19 +1,29 @@
 package com.example.rakhee.codepathtodo;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class EditActivity extends ActionBarActivity {
 
     private EditText etEdit;
     private boolean mIsAddNew;
+    private TextView tvDate;
+    private Item mItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,26 +44,35 @@ public class EditActivity extends ActionBarActivity {
         });
 
         etEdit = (EditText) findViewById(R.id.etEdit);
+        tvDate = (TextView) findViewById(R.id.tvDate);
 
-        String message = getIntent().getStringExtra(MainActivity.EXTRA_EDIT_MESSAGE);
-        mIsAddNew = (message == null);
+        mItem = (Item)getIntent().getSerializableExtra(MainActivity.EXTRA_EDIT_MESSAGE);
+        mIsAddNew = (mItem == null);
 
         if (!mIsAddNew) {
-            etEdit.setText(message);
+            etEdit.setText(mItem.mText);
+
         }
         else {
             // This is add activity
             getActionBar().setTitle(getString(R.string.add_item_title));
 
+            mItem = new Item();
+            mItem.mCompletionDate = new Date();
+
             TextView tvHeader = (TextView) findViewById(R.id.textView);
             tvHeader.setText(getString(R.string.add_item_header));
         }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+        tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
     }
 
     public void onSaveClicked(View view) {
         // Close activity and send back new text
+        mItem.mText = etEdit.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(MainActivity.EXTRA_EDIT_RESULT, etEdit.getText().toString());
+        resultIntent.putExtra(MainActivity.EXTRA_EDIT_RESULT, mItem);
         setResult(RESULT_OK, resultIntent);
         finish();
 
@@ -63,5 +82,28 @@ public class EditActivity extends ActionBarActivity {
         else {
             overridePendingTransition(R.anim.enter_from_left, R.anim.exit_to_right);
         }
+    }
+
+    public void onDateClicked(View view) {
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mItem.mCompletionDate = new Date(year - 1900, monthOfYear, dayOfMonth);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+                tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
+            }
+        };
+
+        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+        DatePickerDialog datePicker = new DatePickerDialog(this,
+                listener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH));
+        datePicker.setCancelable(true);
+        datePicker.show();
+
+
     }
 }

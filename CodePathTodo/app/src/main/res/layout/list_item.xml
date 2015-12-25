@@ -25,28 +25,36 @@
         <!-- Bottom View End-->
 
         <!-- Surface View Start -->
-        <LinearLayout
-            android:background="#ffffff"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:id="@+id/llText">
+            android:id="@+id/llText"
+            android:background="@drawable/ripple">
 
             <CheckBox
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
                 android:text=""
-                android:id="@+id/checkBox"
+                android:id="@+id/cbCheckBox"
                 android:layout_gravity="center_vertical"/>
 
             <TextView
                 android:padding="10dp"
-                android:background="@drawable/ripple"
                 android:id="@+id/tvItem"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical" />
-        </LinearLayout>
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/cbCheckBox"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/tvDate"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/tvItem"
+                android:gravity="right|center_vertical"
+                android:layout_marginRight="10dp"/>
+        </RelativeLayout>
         <!-- Surface View End -->
     </com.daimajia.swipe.SwipeLayout>
 

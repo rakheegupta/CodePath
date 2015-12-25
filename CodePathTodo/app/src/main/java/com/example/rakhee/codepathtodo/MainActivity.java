@@ -75,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
         mPositonPendingEdit = position;
 
         Intent intent = new Intent(MainActivity.this, EditActivity.class);
-        intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit).mText);
+        intent.putExtra(EXTRA_EDIT_MESSAGE, mTodoItems.get(mPositonPendingEdit));
         startActivityForResult(intent, EDIT_MESSAGE_REQUEST_CODE);
 
         overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left);
@@ -93,13 +93,11 @@ public class MainActivity extends ActionBarActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
-                mTodoItems.get(mPositonPendingEdit).mText = data.getStringExtra(EXTRA_EDIT_RESULT);
+                mTodoItems.set(mPositonPendingEdit, (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT));
                 mTodoAdapter.notifyDataSetChanged();
             }
             else if (requestCode == Add_MESSAGE_REQUEST_CODE) {
-                Item newItem = new Item();
-                newItem.mText = data.getStringExtra(EXTRA_EDIT_RESULT);
-                newItem.mIsSelected = false;
+                Item newItem = (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT);
                 mTodoAdapter.add(newItem);
             }
             writeItems();
@@ -108,40 +106,41 @@ public class MainActivity extends ActionBarActivity {
 
     private void populateArrayItems() {
         readItems();
+        mTodoItems = new ArrayList<>();
         mTodoAdapter = new ListViewAdapter(this, mTodoItems);
     }
 
     private void readItems() {
-        File fileDir = getFilesDir();
-        File file = new File(fileDir, "todo.txt");
-        mTodoItems = new ArrayList<>();
-        try{
-            ArrayList<String> items = new ArrayList<>(FileUtils.readLines(file));
-            for (String text: items) {
-                Item item = new Item();
-                item.mText = text;
-                item.mIsSelected = false;
-                mTodoItems.add(item);
-            }
-        }
-        catch (Exception ex){
-
-        }
+//        File fileDir = getFilesDir();
+//        File file = new File(fileDir, "todo.txt");
+//        mTodoItems = new ArrayList<>();
+//        try{
+//            ArrayList<String> items = new ArrayList<>(FileUtils.readLines(file));
+//            for (String text: items) {
+//                Item item = new Item();
+//                item.mText = text;
+//                item.mIsSelected = false;
+//                mTodoItems.add(item);
+//            }
+//        }
+//        catch (Exception ex){
+//
+//        }
     }
 
     private void writeItems() {
-        File fileDir = getFilesDir();
-        File file = new File(fileDir, "todo.txt");
-        try{
-            ArrayList<String> items = new ArrayList<>();
-            for (Item item: mTodoItems) {
-                items.add(item.mText);
-            }
-            FileUtils.writeLines(file, items);
-        }
-        catch (Exception ex){
-
-        }
+//        File fileDir = getFilesDir();
+//        File file = new File(fileDir, "todo.txt");
+//        try{
+//            ArrayList<String> items = new ArrayList<>();
+//            for (Item item: mTodoItems) {
+//                items.add(item.mText);
+//            }
+//            FileUtils.writeLines(file, items);
+//        }
+//        catch (Exception ex){
+//
+//        }
     }
 
     @Override

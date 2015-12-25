@@ -13,6 +13,7 @@ import com.daimajia.swipe.SwipeLayout;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,11 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         TextView tvItem = (TextView) view.findViewById(R.id.tvItem);
         tvItem.setText(item);
 
-        final CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkBox);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/d");
+        TextView tvDate = (TextView)view.findViewById(R.id.tvDate);
+        tvDate.setText(simpleDateFormat.format(getItem(position).mCompletionDate));
+
+        final CheckBox checkBox = (CheckBox)view.findViewById(R.id.cbCheckBox);
         if (((MainActivity)getContext()).mInEditMode) {
                 checkBox.setVisibility(View.VISIBLE);
         }

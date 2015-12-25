@@ -43,14 +43,24 @@
             android:layout_marginTop="46dp"
             android:layout_alignParentEnd="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDate"
+            android:layout_below="@+id/etEdit"
+            android:onClick="onDateClicked"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_edit_save"
             android:id="@+id/btnSave"
-            android:layout_below="@+id/etEdit"
-            android:layout_alignParentStart="true"
-            android:onClick="onSaveClicked"/>
+            android:onClick="onSaveClicked"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tvDate"/>
 
     </RelativeLayout>
 </RelativeLayout>
