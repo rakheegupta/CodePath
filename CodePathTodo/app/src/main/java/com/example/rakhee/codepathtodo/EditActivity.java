@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class EditActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
@@ -34,6 +36,8 @@ public class EditActivity extends ActionBarActivity {
         setActionBar(toolbar);
 
         getWindow().setStatusBarColor(Color.parseColor("#43B3C4"));
+
+
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
