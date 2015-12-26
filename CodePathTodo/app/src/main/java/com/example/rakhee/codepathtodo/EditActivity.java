@@ -53,18 +53,19 @@ public class EditActivity extends ActionBarActivity {
         mItem = (Item)getIntent().getSerializableExtra(MainActivity.EXTRA_EDIT_MESSAGE);
         mIsAddNew = (mItem == null);
 
+        getActionBar().setTitle("");
         if (!mIsAddNew) {
             etEdit.setText(mItem.mText);
 
         }
         else {
             // This is add activity
-            getActionBar().setTitle(getString(R.string.add_item_title));
+
 
             mItem = new Item();
             mItem.mCompletionDate = new Date();
 
-            TextView tvHeader = (TextView) findViewById(R.id.textView);
+            TextView tvHeader = (TextView) findViewById(R.id.tvEditHeader);
             tvHeader.setText(getString(R.string.add_item_header));
         }
 

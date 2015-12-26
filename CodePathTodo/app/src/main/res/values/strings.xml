@@ -6,8 +6,10 @@
     <string name="button_add">Add</string>
     <string name="EditText_Hint">Add a new item</string>
     <string name="title_activity_edit">Edit Item</string>
-    <string name="edit_item_label">Edit Item Below:</string>
+    <string name="edit_item_label">Task</string>
     <string name="button_edit_save">Save</string>
     <string name="add_item_title">Add Item</string>
-    <string name="add_item_header">Add Item Below:</string>
+    <string name="add_item_header">Task</string>
+    <string name="due_date">Due Date</string>
+    <string name="edit_hint">Get pastries @brunch</string>
 </resources>
