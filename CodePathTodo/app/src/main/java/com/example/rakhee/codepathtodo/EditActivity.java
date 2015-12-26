@@ -111,4 +111,7 @@ public class EditActivity extends ActionBarActivity {
 
 
     }
+
+    public void onPriorityClicked(View view) {
+    }
 }

@@ -12,4 +12,9 @@
     <string name="add_item_header">Task</string>
     <string name="due_date">Due Date</string>
     <string name="edit_hint">Get pastries @brunch</string>
+    <string name="priority_header">Priority</string>
+    <string name="priority_4">Priority 4</string>
+    <string name="priority_3">Priority 3</string>
+    <string name="priority_2">Priority 2</string>
+    <string name="priority_1">Priority 1</string>
 </resources>
