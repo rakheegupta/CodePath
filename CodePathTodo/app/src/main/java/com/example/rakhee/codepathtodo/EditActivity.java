@@ -1,6 +1,7 @@
 package com.example.rakhee.codepathtodo;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ public class EditActivity extends ActionBarActivity {
     private boolean mIsAddNew;
     private TextView tvDate;
     private Item mItem;
+    TextView tvPriority;
+    PriorityDialog priorityDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class EditActivity extends ActionBarActivity {
 
         etEdit = (EditText) findViewById(R.id.etEdit);
         tvDate = (TextView) findViewById(R.id.tvDate);
+        tvPriority = (TextView) findViewById(R.id.tvPriority);
 
         mItem = (Item)getIntent().getSerializableExtra(MainActivity.EXTRA_EDIT_MESSAGE);
         mIsAddNew = (mItem == null);
@@ -56,21 +61,24 @@ public class EditActivity extends ActionBarActivity {
         getActionBar().setTitle("");
         if (!mIsAddNew) {
             etEdit.setText(mItem.mText);
-
         }
         else {
             // This is add activity
-
-
             mItem = new Item();
             mItem.mCompletionDate = new Date();
+            mItem.mPriority = 0;
 
             TextView tvHeader = (TextView) findViewById(R.id.tvEditHeader);
             tvHeader.setText(getString(R.string.add_item_header));
         }
 
+        tvPriority.setText("Priority " + (4- mItem.mPriority));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
         tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
+
+        etEdit.setSelection(etEdit.getText().length());
+        etEdit.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     public void onSaveClicked(View view) {
@@ -113,5 +121,15 @@ public class EditActivity extends ActionBarActivity {
     }
 
     public void onPriorityClicked(View view) {
+        FragmentManager fm = getFragmentManager();
+        priorityDialog = new PriorityDialog();
+        priorityDialog.show(fm, "fragment_select_priority");
+    }
+
+    public void onSetPriority(int priority) {
+        mItem.mPriority = priority;
+        tvPriority.setText("Priority " + (4- mItem.mPriority));
+        priorityDialog.dismiss();
+        priorityDialog = null;
     }
 }

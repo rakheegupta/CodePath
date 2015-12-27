@@ -31,12 +31,20 @@
             android:id="@+id/llText"
             android:background="@drawable/ripple">
 
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:id="@+id/ivPriority"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"/>
+
             <CheckBox
                 android:layout_width="25dp"
                 android:layout_height="match_parent"
                 android:text=""
                 android:id="@+id/cbCheckBox"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@id/ivPriority"/>
 
             <TextView
                 android:padding="10dp"

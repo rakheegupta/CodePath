@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -87,20 +88,34 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         TextView tvDate = (TextView)view.findViewById(R.id.tvDate);
         tvDate.setText(simpleDateFormat.format(getItem(position).mCompletionDate));
 
+        ImageView ivPriority = (ImageView) view.findViewById(R.id.ivPriority);
+        if (getItem(position).mPriority == 0) {
+            ivPriority.setImageResource(R.drawable.priority_4);
+        } else if (getItem(position).mPriority == 1) {
+            ivPriority.setImageResource(R.drawable.priority_3);
+        } else if (getItem(position).mPriority == 2) {
+            ivPriority.setImageResource(R.drawable.priority_2);
+        } else if (getItem(position).mPriority == 3) {
+            ivPriority.setImageResource(R.drawable.priority_1);
+        }
+
         final CheckBox checkBox = (CheckBox)view.findViewById(R.id.cbCheckBox);
         if (((MainActivity)getContext()).mInEditMode) {
-                checkBox.setVisibility(View.VISIBLE);
+            checkBox.setVisibility(View.VISIBLE);
+            ivPriority.setVisibility(View.GONE);
         }
         else {
             checkBox.setVisibility(View.GONE);
+            ivPriority.setVisibility(View.VISIBLE);
         }
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getItem(position).mIsSelected = checkBox.isChecked();
-                ((MainActivity)getContext()).onRefreshMenu();
+                ((MainActivity) getContext()).onRefreshMenu();
             }
         });
+
 
         return view;
     }

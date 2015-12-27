@@ -11,4 +11,5 @@ public class Item implements Serializable {
     public String mText;
     public boolean mIsSelected;
     public Date mCompletionDate;
+    public int mPriority;
 }
