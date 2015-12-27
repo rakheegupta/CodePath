@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -82,9 +83,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onDeleteItem(int position) {
+        Item itemToDelete = mTodoItems.get(position);
         mTodoItems.remove(position);
         mTodoAdapter.notifyDataSetChanged();
-        writeItems();
+        itemToDelete.delete();
     }
 
     @Override
@@ -92,40 +94,32 @@ public class MainActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
+            Item newItem = (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT);
             if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
-                mTodoItems.set(mPositonPendingEdit, (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT));
+                mTodoItems.set(mPositonPendingEdit, newItem);
                 mTodoAdapter.notifyDataSetChanged();
             }
             else if (requestCode == Add_MESSAGE_REQUEST_CODE) {
-                Item newItem = (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT);
                 mTodoAdapter.add(newItem);
             }
-            writeItems();
+            newItem.save();
         }
     }
 
     private void populateArrayItems() {
-        readItems();
         mTodoItems = new ArrayList<>();
+        readItems();
         mTodoAdapter = new ListViewAdapter(this, mTodoItems);
     }
 
     private void readItems() {
-//        File fileDir = getFilesDir();
-//        File file = new File(fileDir, "todo.txt");
-//        mTodoItems = new ArrayList<>();
-//        try{
-//            ArrayList<String> items = new ArrayList<>(FileUtils.readLines(file));
-//            for (String text: items) {
-//                Item item = new Item();
-//                item.mText = text;
-//                item.mIsSelected = false;
-//                mTodoItems.add(item);
-//            }
-//        }
-//        catch (Exception ex){
-//
-//        }
+        try{
+            List<Item> items = Item.getAll();
+            mTodoItems.addAll(items);
+        }
+        catch (Exception ex){
+
+        }
     }
 
     private void writeItems() {
@@ -179,14 +173,15 @@ public class MainActivity extends ActionBarActivity {
             for (int i = mTodoItems.size() - 1; i >= 0; i--) {
                 Item item = mTodoItems.get(i);
                 if(item.mIsSelected) {
+                    Item itemToDelete = mTodoItems.get(i);
                     mTodoItems.remove(i);
+                    itemToDelete.delete();
                 }
             }
             mTodoAdapter.notifyDataSetChanged();
             mInEditMode = false;
             mMenuEdit.setVisible(true);
             mMenuDelete.setVisible(false);
-            writeItems();
         }
 
         return super.onOptionsItemSelected(menuItem);
