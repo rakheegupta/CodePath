@@ -17,4 +17,5 @@
     <string name="priority_3">Priority 3</string>
     <string name="priority_2">Priority 2</string>
     <string name="priority_1">Priority 1</string>
+    <string name="no_tasks">No Tasks :(</string>
 </resources>

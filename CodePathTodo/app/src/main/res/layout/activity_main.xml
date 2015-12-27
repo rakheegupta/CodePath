@@ -18,6 +18,13 @@
             android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"
             android:popupTheme="@android:style/ThemeOverlay.Material.Light" />
 
+        <TextView
+            android:id="@+id/tvNoItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/no_tasks"/>
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

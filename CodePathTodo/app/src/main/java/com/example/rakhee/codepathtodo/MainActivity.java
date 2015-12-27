@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import org.apache.commons.io.FileUtils;
@@ -39,6 +40,8 @@ public class MainActivity extends ActionBarActivity {
     MenuItem mMenuEdit;
     MenuItem mMenuDelete;
 
+    TextView tvNoItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,11 @@ public class MainActivity extends ActionBarActivity {
 
         ListView lvItems = (ListView)findViewById(R.id.lvItems);
         lvItems.setAdapter(mTodoAdapter);
+
+        tvNoItems = (TextView) findViewById(R.id.tvNoItems);
+        if (mTodoItems.size() > 0) {
+            tvNoItems.setVisibility(View.GONE);
+        }
 
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -103,6 +111,7 @@ public class MainActivity extends ActionBarActivity {
                 mTodoAdapter.add(newItem);
             }
             newItem.save();
+            tvNoItems.setVisibility(View.GONE);
         }
     }
 
