@@ -11,7 +11,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="TodoItems.db" />
+            android:value="TodoItems2.db" />
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1" />

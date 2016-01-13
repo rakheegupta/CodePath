@@ -30,6 +30,9 @@ public class Item extends Model implements Serializable {
     @Column(name = "mPriority")
     public int mPriority;
 
+    @Column(name = "mNotificationShown")
+    public boolean mNotificationShown;
+
     public static List<Item> getAll() {
         return new Select().all().from(Item.class).execute();
     }

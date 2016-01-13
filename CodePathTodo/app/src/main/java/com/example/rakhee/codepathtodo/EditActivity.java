@@ -69,6 +69,7 @@ public class EditActivity extends ActionBarActivity {
             mItem = new Item();
             mItem.mCompletionDate = new Date();
             mItem.mPriority = 0;
+            mItem.mNotificationShown = false;
 
             TextView tvHeader = (TextView) findViewById(R.id.tvEditHeader);
             tvHeader.setText(getString(R.string.add_item_header));

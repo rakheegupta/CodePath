@@ -2,9 +2,13 @@ package com.example.rakhee.codepathtodo;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +24,12 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -36,6 +45,8 @@ public class MainActivity extends ActionBarActivity {
     private ListViewAdapter mTodoAdapter;
 
     public boolean mInEditMode;
+
+    private Timer mTimer;
 
     MenuItem mMenuEdit;
     MenuItem mMenuDelete;
@@ -78,6 +89,35 @@ public class MainActivity extends ActionBarActivity {
                 onItemClicked(position);
             }
         });
+
+        mTimer = new Timer();
+        mTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+                for (Item item: mTodoItems) {
+                    long diff = item.mCompletionDate.getTime() - cal.getTime().getTime();//as given
+                    long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
+
+                    if (!item.mNotificationShown && minutes <= 5) {
+                        // Show notification
+                        item.mNotificationShown = true;
+                        item.save();
+                        NotificationCompat.Builder notificationBuilder =   new NotificationCompat.Builder(MainActivity.this)
+                                .setSmallIcon(R.drawable.app_icon) // notification icon
+                                .setContentTitle("Item Due") // title for notification
+                                .setContentText(item.mText) // message for notification
+                                .setAutoCancel(true); // clear notification after click
+                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        PendingIntent pi = PendingIntent.getActivity(MainActivity.this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                        notificationBuilder.setContentIntent(pi);
+                        NotificationManager mNotificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(0, notificationBuilder.build());
+                    }
+                }
+            }
+        }, 10 * 1000, 10 * 1000);
     }
 
     public void onItemClicked(int position) {
@@ -104,6 +144,7 @@ public class MainActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             Item newItem = (Item) data.getSerializableExtra(EXTRA_EDIT_RESULT);
             if (requestCode == EDIT_MESSAGE_REQUEST_CODE) {
+                mTodoItems.get(mPositonPendingEdit).delete();
                 mTodoItems.set(mPositonPendingEdit, newItem);
                 mTodoAdapter.notifyDataSetChanged();
             }
