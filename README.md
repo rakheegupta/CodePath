@@ -30,6 +30,7 @@ The following **additional** features are implemented:
 * [X] Multi select and delete items
 * [X] Slide to reveal and delete on each item
 * [X] I did not use dialogfragment for edit activity to keep the material design but used it for priority selection. Therefore considering it done
+* [X] Notifications for items due in next 5 minutes
 
 ## Video Walkthrough 
 
