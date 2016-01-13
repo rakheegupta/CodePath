@@ -84,7 +84,7 @@ public class ListViewAdapter extends ArrayAdapter<Item> {
         TextView tvItem = (TextView) view.findViewById(R.id.tvItem);
         tvItem.setText(item);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/d");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d, HH:mm a");
         TextView tvDate = (TextView)view.findViewById(R.id.tvDate);
         tvDate.setText(simpleDateFormat.format(getItem(position).mCompletionDate));
 

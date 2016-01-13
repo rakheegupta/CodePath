@@ -2,6 +2,7 @@ package com.example.rakhee.codepathtodo;
 
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
@@ -73,7 +75,7 @@ public class EditActivity extends ActionBarActivity {
         }
 
         tvPriority.setText("Priority " + (4- mItem.mPriority));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy HH:mm a");
         tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
 
         etEdit.setSelection(etEdit.getText().length());
@@ -98,17 +100,24 @@ public class EditActivity extends ActionBarActivity {
     }
 
     public void onDateClicked(View view) {
+        final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mItem.mCompletionDate = new Date(year - 1900, monthOfYear, dayOfMonth);
+            public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+                TimePickerDialog timePicker = new TimePickerDialog(EditActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        mItem.mCompletionDate = new Date(year - 1900, monthOfYear, dayOfMonth, hourOfDay, minute);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
-                tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy HH:mm a");
+                        tvDate.setText(simpleDateFormat.format(mItem.mCompletionDate));
+                    }
+                }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
+                timePicker.setCancelable(true);
+                timePicker.show();
             }
         };
 
-        Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         DatePickerDialog datePicker = new DatePickerDialog(this,
                 listener,
                 cal.get(Calendar.YEAR),
