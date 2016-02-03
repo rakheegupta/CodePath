@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -58,12 +59,27 @@ public class PhotoFeedActivity extends AppCompatActivity {
                     for (int i=0;i<photosJson.length();i++) {
                         JSONObject photoJson = photosJson.getJSONObject(i);
                         Photo photo= new Photo();
+
                         photo.setUserName(photoJson.getJSONObject("user").getString("username"));
+
                         photo.setUserPhotoUrl(photoJson.getJSONObject("user").getString("profile_picture"));
+
                         if (photoJson.optJSONObject("caption") != null)
                             photo.setCaptionText(photoJson.getJSONObject("caption").getString("text"));
+
                         photo.setLikesCount(photoJson.getJSONObject("likes").getInt("count"));
-                        photo.setCreatedTimeString(DateUtils.getRelativeTimeSpanString(photoJson.getLong("created_time") * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString());
+
+                        String photoDuration[]=DateUtils.getRelativeTimeSpanString(photoJson.getLong("created_time") * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString().split(" ");
+                        String qualifier="";
+                        if(photoDuration[1].toLowerCase().contains("minute"))
+                            qualifier="m";
+                        if(photoDuration[1].toLowerCase().contains("hour"))
+                            qualifier="h";
+                        if(photoDuration[1].toLowerCase().contains("second"))
+                            qualifier="s";
+
+                        photo.setCreatedTimeString(photoDuration[0] + qualifier);
+
                         photo.setUrl(photoJson.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
                         mPhotoFeed.add(photo);
                     }

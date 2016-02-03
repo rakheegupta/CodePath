@@ -41,6 +41,19 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         // Set image
         ImageView ivPhoto =(ImageView)convertView.findViewById(R.id.ivPhoto);
         Picasso.with(getContext()).load(photo.getUrl()).into(ivPhoto);
+
+        //set duration
+        TextView tvDuration =(TextView) convertView.findViewById(R.id.tvDuration);
+        tvDuration.setText(photo.getCreatedTimeString());
+
+        //set likescount
+        TextView tvLikesCount = (TextView)convertView.findViewById(R.id.tvLikesCount);
+        tvLikesCount.setText(photo.getLikesCountString());
+
+        //set caption
+        TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
+        tvCaption.setText(photo.getCaptionText());
+
         return convertView;
     }
 }

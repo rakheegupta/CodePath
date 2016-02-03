@@ -1,6 +1,7 @@
 package com.example.rakhe.instagramclient;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 
 /**
  * Created by rakhe on 2/2/2016.
@@ -48,7 +49,13 @@ public class Photo {
     }
 
     public int getLikesCount() {
-        return likesCount;
+         return likesCount;
+    }
+
+    public String getLikesCountString() {
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        String formattedLikes = formatter.format(likesCount)+" likes";
+        return formattedLikes;
     }
 
     public void setLikesCount(int likesCount) {
