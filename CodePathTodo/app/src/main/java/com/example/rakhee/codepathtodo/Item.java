@@ -27,6 +27,10 @@ public class Item extends Model implements Serializable {
     @Column(name = "mCompletionDate")
     public Date mCompletionDate;
 
+    public int getmPriority() {
+        return mPriority;
+    }
+
     @Column(name = "mPriority")
     public int mPriority;
 

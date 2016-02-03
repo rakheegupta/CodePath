@@ -1,6 +1,7 @@
 package com.example.rakhee.codepathtodo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class PriorityListViewAdapter extends ArrayAdapter<String> {
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.priority_list_item, null);
         }
+        view.setBackgroundColor(Color.WHITE);
         ImageView ivPriority = (ImageView) view.findViewById(R.id.ivPriority);
         if (position == 0) {
             ivPriority.setImageResource(R.drawable.priority_4);
@@ -39,7 +41,8 @@ public class PriorityListViewAdapter extends ArrayAdapter<String> {
             ivPriority.setImageResource(R.drawable.priority_1);
         }
 
-
+        if( position == ((EditActivity)getContext()).getmItem().getmPriority())
+            view .setBackgroundColor(Color.YELLOW);
         TextView tvPriority = (TextView) view.findViewById(R.id.tvPriority);
         tvPriority.setText(getItem(position));
 

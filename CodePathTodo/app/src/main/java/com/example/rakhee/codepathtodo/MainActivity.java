@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public final static String EXTRA_EDIT_MESSAGE = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_MESSAGE";
     public final static String EXTRA_EDIT_RESULT = "com.example.rakhee.codepathtodo.MainActivity.EXTRA_EDIT_RESULT";
@@ -196,7 +197,7 @@ public class MainActivity extends ActionBarActivity {
 
         mMenuEdit = menu.findItem(R.id.edit);
         mMenuDelete = menu.findItem(R.id.delete);
-
+        mMenuEdit.setEnabled(true);
         boolean somethingSelected = false;
         for (Item item: mTodoItems) {
             if (item.mIsSelected) {
@@ -204,7 +205,8 @@ public class MainActivity extends ActionBarActivity {
                 break;
             }
         }
-
+        if (mTodoItems.isEmpty())
+            mMenuEdit.setEnabled(false);
         mMenuEdit.setVisible(!somethingSelected);
         mMenuDelete.setVisible(somethingSelected);
 

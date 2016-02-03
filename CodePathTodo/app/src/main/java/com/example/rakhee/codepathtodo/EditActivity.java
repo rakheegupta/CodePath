@@ -28,9 +28,15 @@ public class EditActivity extends ActionBarActivity {
     private EditText etEdit;
     private boolean mIsAddNew;
     private TextView tvDate;
+
+
     private Item mItem;
     TextView tvPriority;
     PriorityDialog priorityDialog;
+
+    public Item getmItem() {
+        return mItem;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
