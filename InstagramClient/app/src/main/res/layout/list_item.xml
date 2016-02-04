@@ -2,22 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/rlHeader"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ivUserProfilePhoto"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="30dip"
+            app:riv_mutate_background="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+            android:layout_marginRight="@dimen/activity_horizontal_margin" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +72,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/llLikes"
         android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin">
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
         <ImageView
             android:layout_width="10dp"
             android:layout_height="10dp"
@@ -79,22 +90,47 @@
             android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
-    <TextView
+    <com.ms.square.android.expandabletextview.ExpandableTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tvCaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvCaption"
-        android:maxLines="3"/>
+        expandableTextView:maxCollapsedLines="3"
+        expandableTextView:animDuration="200">
+        <TextView
+            android:id="@id/expandable_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#666666" />
+        <ImageButton
+            android:id="@id/expand_collapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_gravity="right|bottom"
+            android:background="@android:color/transparent"/>
+    </com.ms.square.android.expandabletextview.ExpandableTextView>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvAllComments"
-        android:text="@string/view_all_comments"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
-    <TextView
+    <org.sufficientlysecure.htmltextview.HtmlTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvLastTwoComments"/>
-
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:id="@+id/tvLastTwoComments"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:autoLink="all"
+        android:linksClickable="true"/>
 
 
 </LinearLayout>

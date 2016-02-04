@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.example.rakhe.instagramclient.PhotoFeedActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ListView
         android:layout_width="match_parent"
@@ -17,4 +22,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

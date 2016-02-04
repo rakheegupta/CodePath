@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">LoginTest</string>
+    <string name="user_name_hint">username@domain.com</string>
+    <string name="formattedHeader">
+    <![CDATA[
+        <b>Welcome aboard!<br>Please login to start participating.</b>
+    ]]>
+    </string>
+</resources>

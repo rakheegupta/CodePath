@@ -2,6 +2,7 @@ package com.example.rakhe.instagramclient;
 
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by rakhe on 2/2/2016.
@@ -23,6 +24,24 @@ public class Photo {
     private int likesCount;
     private String createdTimeString;
     private String url;
+    private ArrayList<Comment> allComments;
+    private int commentsCount;
+
+    public ArrayList<Comment> getAllComments() {
+        return allComments;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
+    }
+
+    public void setAllComments(ArrayList<Comment> allComments) {
+        this.allComments = allComments;
+    }
 
     public String getUserName() {
         return userName;
