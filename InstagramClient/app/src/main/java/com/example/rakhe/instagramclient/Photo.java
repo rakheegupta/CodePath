@@ -30,6 +30,24 @@ public class Photo implements Serializable {
     private String url;
     private ArrayList<Comment> allComments;
     private int commentsCount;
+    private String type;
+    private String videoURL;
+
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public ArrayList<Comment> getAllComments() {
         return allComments;

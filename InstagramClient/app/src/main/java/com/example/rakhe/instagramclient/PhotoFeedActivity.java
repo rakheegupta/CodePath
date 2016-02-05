@@ -37,6 +37,9 @@ public class PhotoFeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_feed);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.app_icon);
+
         mPhotoFeed=new ArrayList<Photo>();
         mPhotoAdapter=new PhotoAdapter(this, mPhotoFeed);
         mLvPhotoFeed = (ListView)findViewById(R.id.lvPhotoFeed);
@@ -108,9 +111,17 @@ public class PhotoFeedActivity extends AppCompatActivity {
                         photo.setUrl(photoJson.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
 
                         //comments
-                        photo.setAllComments(parseAllCommentsFromJSON(photoJson.getJSONObject("comments").getJSONArray("data")));
-                        photo.setCommentsCount(photo.getAllComments().size());
+                        if (photoJson.optJSONObject("comments") != null && photoJson.getJSONObject("comments").optJSONArray("data") !=null )
+                            photo.setAllComments(parseAllCommentsFromJSON(photoJson.getJSONObject("comments").getJSONArray("data")));
 
+                        if (photo.getAllComments()!=null)
+                            photo.setCommentsCount(photo.getAllComments().size());
+
+                        //type
+                        photo.setType(photoJson.getString("type"));
+                        if (photo.getType().equalsIgnoreCase("video")){
+                            photo.setVideoURL(photoJson.getJSONObject("videos").getJSONObject("standard_resolution").getString("url"));
+                        }
                         mPhotoFeed.add(photo);
                     }
                     mPhotoAdapter.notifyDataSetChanged();

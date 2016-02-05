@@ -17,7 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CommentFeedActivity"></activity>
+        <activity android:name=".CommentFeedActivity"
+            android:label="@string/comment_activity_label"
+            />
+        <activity android:name=".FullScreenVideoActivity"></activity>
     </application>
 
 </manifest>

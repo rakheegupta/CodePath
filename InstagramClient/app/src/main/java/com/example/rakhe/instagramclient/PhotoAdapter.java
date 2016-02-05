@@ -53,7 +53,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
 
         // Set image
         ImageView ivPhoto =(ImageView)convertView.findViewById(R.id.ivPhoto);
-        Picasso.with(getContext()).load(photo.getUrl()).into(ivPhoto);
+        Picasso.with(getContext()).load(photo.getUrl()).placeholder(R.drawable.placeholder).into(ivPhoto);
 
         //set duration
         TextView tvDuration =(TextView) convertView.findViewById(R.id.tvDuration);
@@ -70,38 +70,62 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
 
         //last 2 comments
         HtmlTextView tvLastTwoComments = (HtmlTextView) convertView.findViewById(R.id.tvLastTwoComments);
-        Comment comment1=photo.getAllComments().get(0);
-        Comment comment2=photo.getAllComments().get(1);
-        tvLastTwoComments.setText(formatComments(comment1,comment2),TextView.BufferType.EDITABLE);
+
+        SpannableStringBuilder formattedComments=new SpannableStringBuilder();
+        if (photo.getAllComments()!=null) {
+            Comment comment1 = photo.getAllComments().get(0);
+            formattedComments=formatComments(comment1);
+        }
+        if (photo.getAllComments()!=null&&photo.getAllComments().size()>1) {
+            Comment comment2 = photo.getAllComments().get(1);
+            formattedComments.append(formatComments(comment2));
+        }
+
+        tvLastTwoComments.setText(formattedComments,TextView.BufferType.EDITABLE);
 
 
         //comments count
         TextView tvCommentsCount = (TextView) convertView.findViewById(R.id.tvAllComments);
-        tvCommentsCount.setText("View all " + photo.getCommentsCount() + " comments");
+        if (photo.getCommentsCount()!=0)
+            tvCommentsCount.setText("View all " + photo.getCommentsCount() + " comments");
+        else
+            tvCommentsCount.setVisibility(View.INVISIBLE);
 
         tvCommentsCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent i = new Intent(getContext(), CommentFeedActivity.class);
-                    // put "extras" into the bundle for access in the second activity
-                    i.putExtra("photo",photo);
-                    // brings up the second activity
-                    getContext().startActivity(i);
-                }
+                Intent i = new Intent(getContext(), CommentFeedActivity.class);
+                // put "extras" into the bundle for access in the second activity
+                i.putExtra("photo", photo);
+                // brings up the second activity
+                getContext().startActivity(i);
             }
-        );
-
+        });
+        //video play
+        ImageView ivPlayButton = (ImageView) convertView.findViewById(R.id.ivPlay);
+        if (photo.getType().equalsIgnoreCase("video")) {
+            ivPlayButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            ivPlayButton.setVisibility(View.INVISIBLE);
+        }
+        ivPlayButton.setOnClickListener(new View.OnClickListener(){
+             @Override
+             public void onClick(View v) {
+                 Intent myIntent = new Intent(getContext(),
+                         FullScreenVideoActivity.class);
+                 myIntent.putExtra("url",photo.getVideoURL());
+                 getContext().startActivity(myIntent);
+             }
+        });
         return convertView;
     }
 
-    public SpannableStringBuilder formatComments(Comment comment1,Comment comment2){
-        SpannableStringBuilder ssb = formatUserName(comment1.getCommentFrom().getmUserName());
+    public SpannableStringBuilder formatComments(Comment comment){
+        SpannableStringBuilder ssb = formatUserName(comment.getCommentFrom().getmUserName());
         ssb.append(" ");
-        ssb.append(comment1.getText());
+        ssb.append(comment.getText());
         ssb.append("\n");
-        ssb.append(formatUserName(comment2.getCommentFrom().getmUserName()));
-        ssb.append(" ");
-        ssb.append(comment2.getText());
         return ssb;
     }
 
