@@ -1,9 +1,11 @@
 package com.example.rakhe.instagramclient;
 
+import java.io.Serializable;
+
 /**
  * Created by rakhe on 2/3/2016.
  */
-public class User {
+public class User implements Serializable {
     private String mUserName;
     private String mFullName;
     private String mProfilePictureURL;

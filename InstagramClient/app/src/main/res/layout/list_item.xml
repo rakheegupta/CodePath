@@ -56,7 +56,7 @@
             />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
@@ -120,7 +120,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvAllComments"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textColor="@android:color/secondary_text_light_nodisable"
+       />
 
     <org.sufficientlysecure.htmltextview.HtmlTextView
         android:layout_width="match_parent"

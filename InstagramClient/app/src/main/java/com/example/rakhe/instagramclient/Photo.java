@@ -1,5 +1,9 @@
 package com.example.rakhe.instagramclient;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -7,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by rakhe on 2/2/2016.
  */
-public class Photo {
+public class Photo implements Serializable {
     //json -> response = json object -> data (key)[] ->
     //user -> username
     //user -> profile_picture
@@ -16,7 +20,7 @@ public class Photo {
     //likes ->count
     //created_time
     // images -> standard_resolution ->url
-
+    private static final long serialVersionUID = 0L;
     private String userName;
     private String userPhotoUrl;
     private String captionText;
@@ -96,4 +100,6 @@ public class Photo {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
 }

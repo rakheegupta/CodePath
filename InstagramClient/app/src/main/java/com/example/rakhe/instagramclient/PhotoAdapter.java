@@ -1,6 +1,7 @@
 package com.example.rakhe.instagramclient;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -18,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         if (convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,parent,false);
         }
-        Photo photo=getItem(position);
+        final Photo photo=getItem(position);
 
         // Set user image
         ImageView ivUserProfilePic = (ImageView) convertView.findViewById(R.id.ivUserProfilePhoto);
@@ -75,7 +77,20 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
 
         //comments count
         TextView tvCommentsCount = (TextView) convertView.findViewById(R.id.tvAllComments);
-        tvCommentsCount.setText("View all "+photo.getCommentsCount()+" comments");
+        tvCommentsCount.setText("View all " + photo.getCommentsCount() + " comments");
+
+        tvCommentsCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent i = new Intent(getContext(), CommentFeedActivity.class);
+                    // put "extras" into the bundle for access in the second activity
+                    i.putExtra("photo",photo);
+                    // brings up the second activity
+                    getContext().startActivity(i);
+                }
+            }
+        );
+
         return convertView;
     }
 

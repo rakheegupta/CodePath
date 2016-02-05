@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:id="@+id/rlcommentItem"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/activity_horizontal_margin">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ivCommentUserProfilePhoto"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:scaleType="fitCenter"
+            app:riv_corner_radius="30dip"
+            app:riv_mutate_background="true"
+            app:riv_tile_mode="repeat"
+            app:riv_oval="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvCommentText"
+            android:layout_alignTop="@+id/ivCommentUserProfilePhoto"
+            android:gravity="left"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_toRightOf="@+id/ivCommentUserProfilePhoto"
+            android:layout_toEndOf="@+id/ivCommentUserProfilePhoto"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvCommentDuration"
+            android:gravity="left"
+            android:layout_alignLeft="@+id/tvCommentText"
+            android:layout_alignRight="@+id/tvCommentText"
+            android:textColor="@android:color/secondary_text_light_nodisable"
+            android:layout_toRightOf="@+id/ivCommentUserProfilePhoto"
+            android:layout_toEndOf="@+id/ivCommentUserProfilePhoto"
+            android:layout_below="@+id/tvCommentText"
+            />
+
+
+    </RelativeLayout>
