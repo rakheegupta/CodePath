@@ -72,7 +72,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         HtmlTextView tvLastTwoComments = (HtmlTextView) convertView.findViewById(R.id.tvLastTwoComments);
 
         SpannableStringBuilder formattedComments=new SpannableStringBuilder();
-        if (photo.getAllComments()!=null) {
+        if (photo.getAllComments()!=null&&photo.getAllComments().size()>0) {
             Comment comment1 = photo.getAllComments().get(0);
             formattedComments=formatComments(comment1);
         }

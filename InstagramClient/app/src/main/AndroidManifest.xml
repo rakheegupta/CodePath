@@ -19,8 +19,11 @@
         </activity>
         <activity android:name=".CommentFeedActivity"
             android:label="@string/comment_activity_label"
+            android:parentActivityName=".PhotoFeedActivity"
             />
-        <activity android:name=".FullScreenVideoActivity"></activity>
+        <activity android:name=".FullScreenVideoActivity"
+            android:label=""
+            android:parentActivityName=".PhotoFeedActivity"></activity>
     </application>
 
 </manifest>
