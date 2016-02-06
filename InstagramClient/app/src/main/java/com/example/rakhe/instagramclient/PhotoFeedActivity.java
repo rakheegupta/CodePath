@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class PhotoFeedActivity extends AppCompatActivity {
 
@@ -31,18 +32,18 @@ public class PhotoFeedActivity extends AppCompatActivity {
     private ArrayList<Photo> mPhotoFeed;
     private PhotoAdapter mPhotoAdapter;
     private SwipeRefreshLayout mSwipeContainer;
-    ListView mLvPhotoFeed;
+    StickyListHeadersListView mLvPhotoFeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_feed);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.app_icon);
+        getSupportActionBar().setLogo(R.drawable.ic_action_name);
 
         mPhotoFeed=new ArrayList<Photo>();
         mPhotoAdapter=new PhotoAdapter(this, mPhotoFeed);
-        mLvPhotoFeed = (ListView)findViewById(R.id.lvPhotoFeed);
+        mLvPhotoFeed = (StickyListHeadersListView )findViewById(R.id.lvPhotoFeed);
         mLvPhotoFeed.setAdapter(mPhotoAdapter);
         getPhotoFeed();
 

@@ -1,5 +1,4 @@
 package com.example.rakhe.instagramclient;
-
 import java.io.Serializable;
 
 /**

@@ -22,10 +22,12 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
 /**
  * Created by rakhe on 2/2/2016.
  */
-public class PhotoAdapter extends ArrayAdapter<Photo> {
+public class PhotoAdapter extends ArrayAdapter<Photo> implements StickyListHeadersAdapter {
 
     Context mActivityContext;
 
@@ -35,7 +37,6 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         mActivityContext=context;
     }
 
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView==null){
@@ -43,21 +44,9 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
         }
         final Photo photo=getItem(position);
 
-        // Set user image
-        ImageView ivUserProfilePic = (ImageView) convertView.findViewById(R.id.ivUserProfilePhoto);
-        Picasso.with(getContext()).load(photo.getUserPhotoUrl()).into(ivUserProfilePic);
-
-        // Set user name
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        tvUserName.setText(photo.getUserName());
-
         // Set image
         ImageView ivPhoto =(ImageView)convertView.findViewById(R.id.ivPhoto);
         Picasso.with(getContext()).load(photo.getUrl()).placeholder(R.drawable.placeholder).into(ivPhoto);
-
-        //set duration
-        TextView tvDuration =(TextView) convertView.findViewById(R.id.tvDuration);
-        tvDuration.setText(photo.getCreatedTimeString());
 
         //set likescount
         TextView tvLikesCount = (TextView)convertView.findViewById(R.id.tvLikesCount);
@@ -142,7 +131,34 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // behavior when text is later inserted into the SpannableStringBuilder
         // SPAN_EXCLUSIVE_EXCLUSIVE means to not extend the span when additional
         // text is added in later
-        ssb.setSpan(boldSpan,0,ssb.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(boldSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return ssb;
+    }
+
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        if (convertView==null){
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_header,parent,false);
+        }
+        final Photo photo=getItem(position);
+
+        // Set user image
+        ImageView ivUserProfilePic = (ImageView) convertView.findViewById(R.id.ivUserProfilePhoto);
+        Picasso.with(getContext()).load(photo.getUserPhotoUrl()).into(ivUserProfilePic);
+
+        // Set user name
+        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+        tvUserName.setText(photo.getUserName());
+
+        //set duration
+        TextView tvDuration =(TextView) convertView.findViewById(R.id.tvDuration);
+        tvDuration.setText(photo.getCreatedTimeString());
+
+        return convertView;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return position;
     }
 }
