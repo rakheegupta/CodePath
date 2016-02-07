@@ -2,6 +2,11 @@ package com.example.rakhe.instagramclient;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -32,6 +37,15 @@ public class Photo implements Serializable {
     private int commentsCount;
     private String type;
     private String videoURL;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getVideoURL() {
         return videoURL;
@@ -99,6 +113,12 @@ public class Photo implements Serializable {
         return formattedLikes;
     }
 
+    public String getCommentsCountString() {
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        String formattedCommentsCount = formatter.format(commentsCount);
+        return formattedCommentsCount;
+    }
+
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
     }
@@ -119,5 +139,27 @@ public class Photo implements Serializable {
         this.url = url;
     }
 
+    public static ArrayList<Comment> parseAllCommentsFromJSON(JSONArray commentsJSON) {
+        ArrayList<Comment> allComments = new ArrayList<Comment>();
+        for (int i = 0; i < commentsJSON.length(); i++) {
+            try {
+                JSONObject commentJSON = commentsJSON.getJSONObject(i);
+                Comment comment = new Comment();
+
+                comment.setCreatedTimeString(DateUtils.getRelativeTimeSpanString(commentJSON.getLong("created_time") * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString());
+
+                User commentFromUser = new User();
+                commentFromUser.setmUserName(commentJSON.getJSONObject("from").getString("username"));
+                commentFromUser.setmProfilePictureURL(commentJSON.getJSONObject("from").getString("profile_picture"));
+                comment.setCommentFrom(commentFromUser);
+
+                comment.setText(commentJSON.getString("text"));
+                allComments.add(comment);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return allComments;
+    }
 
 }

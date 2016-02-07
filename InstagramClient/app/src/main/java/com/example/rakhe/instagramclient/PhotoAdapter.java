@@ -76,7 +76,7 @@ public class PhotoAdapter extends ArrayAdapter<Photo> implements StickyListHeade
         //comments count
         TextView tvCommentsCount = (TextView) convertView.findViewById(R.id.tvAllComments);
         if (photo.getCommentsCount()!=0)
-            tvCommentsCount.setText("View all " + photo.getCommentsCount() + " comments");
+            tvCommentsCount.setText("View all " + photo.getCommentsCountString() + " comments");
         else
             tvCommentsCount.setVisibility(View.INVISIBLE);
 

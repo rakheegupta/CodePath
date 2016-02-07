@@ -90,6 +90,8 @@ public class PhotoFeedActivity extends AppCompatActivity {
                         JSONObject photoJson = photosJson.getJSONObject(i);
                         Photo photo = new Photo();
 
+                        photo.setId(photoJson.getString("id"));
+
                         photo.setUserName(photoJson.getJSONObject("user").getString("username"));
 
                         photo.setUserPhotoUrl(photoJson.getJSONObject("user").getString("profile_picture"));
@@ -112,13 +114,12 @@ public class PhotoFeedActivity extends AppCompatActivity {
                         photo.setUrl(photoJson.getJSONObject("images").getJSONObject("standard_resolution").getString("url"));
 
                         //comments
-                        if (photoJson.optJSONObject("comments") != null && photoJson.getJSONObject("comments").optJSONArray("data") !=null )
-                            photo.setAllComments(parseAllCommentsFromJSON(photoJson.getJSONObject("comments").getJSONArray("data")));
+                        if (photoJson.optJSONObject("comments") != null && photoJson.getJSONObject("comments").optJSONArray("data") != null)
+                        {
+                            photo.setAllComments(Photo.parseAllCommentsFromJSON(photoJson.getJSONObject("comments").getJSONArray("data")));
+                            photo.setCommentsCount(photoJson.getJSONObject("comments").getInt("count"));
+                        }
 
-                        if (photo.getAllComments()!=null)
-                            photo.setCommentsCount(photo.getAllComments().size());
-
-                        //type
                         photo.setType(photoJson.getString("type"));
                         if (photo.getType().equalsIgnoreCase("video")){
                             photo.setVideoURL(photoJson.getJSONObject("videos").getJSONObject("standard_resolution").getString("url"));
@@ -146,27 +147,6 @@ public class PhotoFeedActivity extends AppCompatActivity {
         return mPhotoFeed;
     }
 
-    public ArrayList<Comment> parseAllCommentsFromJSON(JSONArray commentsJSON) {
-        ArrayList<Comment> allComments = new ArrayList<Comment>();
-        for (int i = 0; i < commentsJSON.length(); i++) {
-            try {
-                JSONObject commentJSON = commentsJSON.getJSONObject(i);
-                Comment comment = new Comment();
 
-                comment.setCreatedTimeString(DateUtils.getRelativeTimeSpanString(commentJSON.getLong("created_time") * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString());
-
-                User commentFromUser = new User();
-                commentFromUser.setmUserName(commentJSON.getJSONObject("from").getString("username"));
-                commentFromUser.setmProfilePictureURL(commentJSON.getJSONObject("from").getString("profile_picture"));
-                comment.setCommentFrom(commentFromUser);
-
-                comment.setText(commentJSON.getString("text"));
-                allComments.add(comment);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return allComments;
-    }
 
 }
