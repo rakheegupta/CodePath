@@ -141,6 +141,10 @@ public class Photo implements Serializable {
 
     public static ArrayList<Comment> parseAllCommentsFromJSON(JSONArray commentsJSON) {
         ArrayList<Comment> allComments = new ArrayList<Comment>();
+
+        if (commentsJSON == null)
+            return allComments;
+
         for (int i = 0; i < commentsJSON.length(); i++) {
             try {
                 JSONObject commentJSON = commentsJSON.getJSONObject(i);
