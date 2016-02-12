@@ -1,5 +1,7 @@
 package com.rakhee.codepath.nytimesarticle;
 
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -136,5 +138,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                FragmentManager fm = getFragmentManager();
+                SettingsDialog settingsDialog = SettingsDialog.newInstance();
+                settingsDialog.show(fm, "fragment_settings_dialog");
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
