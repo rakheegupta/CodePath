@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">News Search</string>
     <string-array name="sort_order">
-        <item>Ascending</item>
-        <item>Descending</item>
+        <item>Oldest</item>
+        <item>Newest</item>
     </string-array>
 </resources>
