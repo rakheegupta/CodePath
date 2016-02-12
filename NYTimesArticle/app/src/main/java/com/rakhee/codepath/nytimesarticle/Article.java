@@ -18,6 +18,8 @@ public class Article {
     private String title; // headline
     private String url;
     private String thumbnailURL;
+    private int width;
+    private int height;
 
     public Article(String title, String url) {
         this.title = title;
@@ -36,6 +38,14 @@ public class Article {
         return thumbnailURL;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public Article(JSONObject jsonObject) {
         try {
             url = jsonObject.getString("web_url");
@@ -43,11 +53,11 @@ public class Article {
 
             JSONArray multimedia = jsonObject.getJSONArray("multimedia");
 
-            if (multimedia.length() == 1) {
-                JSONObject multimediaJson = multimedia.getJSONObject(0);
-            } else if (multimedia.length() > 1) {
-                JSONObject multimediaJson = multimedia.getJSONObject(new Random().nextInt(multimedia.length() - 1));
+            if (multimedia.length() >= 1) {
+                JSONObject multimediaJson = multimedia.getJSONObject(new Random().nextInt(multimedia.length()));
                 thumbnailURL = "http://www.nytimes.com/" + multimediaJson.getString("url");
+                width = multimediaJson.getInt("width");
+                height = multimediaJson.getInt("height");
             } else {
                 thumbnailURL = "";
             }

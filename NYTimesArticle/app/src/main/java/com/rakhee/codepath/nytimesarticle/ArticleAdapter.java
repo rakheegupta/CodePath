@@ -24,7 +24,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvTitle;
-        public ImageView ivThumbnail;
+        public DynamicHeightImageView ivThumbnail;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -34,7 +34,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             super(itemView);
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            ivThumbnail = (ImageView) itemView.findViewById(R.id.ivThumbnail);
+            ivThumbnail = (DynamicHeightImageView) itemView.findViewById(R.id.ivThumbnail);
         }
     }
 
@@ -70,14 +70,32 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         TextView tvTitle = viewHolder.tvTitle;
         tvTitle.setText(article.getTitle());
 
-        ImageView ivThumbnail = viewHolder.ivThumbnail;
-        Picasso.with(context).load(article.getThumbnailURL()).into(ivThumbnail);
-
+        DynamicHeightImageView ivThumbnail = viewHolder.ivThumbnail;
+        String imageUrl = article.getThumbnailURL();
+        if (!IsNullOrEmpty(imageUrl)) {
+            ivThumbnail.setHeightRatio(((double) article.getHeight()) / article.getWidth());
+            Picasso.with(context).load(imageUrl).into(ivThumbnail);
+        }
+        else {
+            ivThumbnail.setHeightRatio(0);
+            ivThumbnail.setImageResource(0);
+        }
     }
 
     // Return the total count of items
     @Override
     public int getItemCount() {
         return mArticles.size();
+    }
+
+    boolean IsNullOrEmpty(String str) {
+        if (str == null)
+            return true;
+
+        String trimmed = str.trim();
+        if (trimmed.equals(""))
+            return true;
+
+        return false;
     }
 }
