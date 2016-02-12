@@ -71,7 +71,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         tvTitle.setText(article.getTitle());
 
         ImageView ivThumbnail = viewHolder.ivThumbnail;
-        Picasso.with(context).load(article.getUrl()).into(ivThumbnail);
+        Picasso.with(context).load(article.getThumbnailURL()).into(ivThumbnail);
 
     }
 

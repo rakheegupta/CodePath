@@ -28,26 +28,12 @@ public class Article {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public static List<Article> createArticleList(int size){
-        List<Article> articles = new ArrayList<Article>();
-
-        for (int i = 1; i <= size; i++) {
-            articles.add(new Article("the header text","https://upload.wikimedia.org/wikipedia/commons/4/4f/Matterhorn_Riffelsee_2005-06-11.jpg"));
-        }
-
-        return articles;
+    public String getThumbnailURL() {
+        return thumbnailURL;
     }
 
     public Article(JSONObject jsonObject) {
