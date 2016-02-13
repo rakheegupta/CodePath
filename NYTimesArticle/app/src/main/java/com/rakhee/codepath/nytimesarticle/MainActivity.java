@@ -156,8 +156,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater infalter = getMenuInflater();
-        infalter.inflate(R.menu.action_search,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_search,menu);
         MenuItem searchItem =menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
