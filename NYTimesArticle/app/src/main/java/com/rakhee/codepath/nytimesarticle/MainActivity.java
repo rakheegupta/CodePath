@@ -1,7 +1,9 @@
 package com.rakhee.codepath.nytimesarticle;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,12 +20,15 @@ import android.widget.AbsListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,9 +92,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchMore() {
         isFetching = true;
-        String url="http://api.nytimes.com/svc/search/v2/articlesearch.json?q="+query+"&api-key=14ea6144682ebe934eb6237f8edb9049:1:74337110&page=" + String.valueOf(page);
+
+        String url="http://api.nytimes.com/svc/search/v2/articlesearch.json";
+        RequestParams params = new RequestParams();
+        params.add("q", query);
+        params.add("api-key", "14ea6144682ebe934eb6237f8edb9049:1:74337110");
+        params.add("page", String.valueOf(page));
+
+        SharedPreferences pref = getSharedPreferences("NYTimesArticleSearch", Context.MODE_PRIVATE);
+        String filtersStr = pref.getString("SearchFilters", null);
+        if (filtersStr != null) {
+            SearchFilters filters = new Gson().fromJson(filtersStr, SearchFilters.class);
+            if (filters.beginDate != null) {
+                params.add("begin_date", new SimpleDateFormat("yyyyMMdd").format(filters.beginDate));
+            }
+
+            if (filters.newsDeskValues != null && filters.newsDeskValues.size() > 0) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("news_desk:(");
+                for (int i = 0; i < filters.newsDeskValues.size(); i++){
+                    sb.append("\"");
+                    sb.append(filters.newsDeskValues.get(i));
+                    sb.append("\"");
+                    if (i != filters.newsDeskValues.size() - 1) {
+                        sb.append(" ");
+                    }
+                }
+                sb.append(")");
+                params.add("fq", sb.toString());
+            }
+
+            params.add("sort", filters.sortOrder);
+        }
+
         AsyncHttpClient client=new AsyncHttpClient();
-        client.get(url,new JsonHttpResponseHandler(){
+        client.get(url, params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // parse response
