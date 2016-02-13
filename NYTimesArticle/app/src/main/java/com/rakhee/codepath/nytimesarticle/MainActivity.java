@@ -14,6 +14,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.AbsListView;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+  
     }
 
     private void fetchMore() {

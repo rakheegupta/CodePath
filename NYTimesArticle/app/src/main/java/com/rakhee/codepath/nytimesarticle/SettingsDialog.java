@@ -66,18 +66,16 @@ public class SettingsDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
-                        selectedDate = new Date(year - 1900, monthOfYear, dayOfMonth);
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                        etBeginDate.setText(sdf.format(selectedDate));
-                    }
-                };
-
                 DatePickerDialog datePicker = new DatePickerDialog(getActivity(),
-                        listener,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
+                                selectedDate = new Date(year - 1900, monthOfYear, dayOfMonth);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                                etBeginDate.setText(sdf.format(selectedDate));
+                            }
+                        },
                         cal.get(Calendar.YEAR),
                         cal.get(Calendar.MONTH),
                         cal.get(Calendar.DAY_OF_MONTH));
@@ -121,15 +119,6 @@ public class SettingsDialog extends DialogFragment {
                 dismiss();
             }
         });
-
-//        // Get field from view
-//        mEditText = (EditText) view.findViewById(R.id.txt_your_name);
-//        // Fetch arguments from bundle and set title
-//        String title = getArguments().getString("title", "Enter Name");
-//        getDialog().setTitle(title);
-//        // Show soft keyboard automatically and request focus to field
-//        mEditText.requestFocus();
-//        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override
