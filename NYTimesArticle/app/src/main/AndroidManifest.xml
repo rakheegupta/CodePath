@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ArticleActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:label="@string/article_activity_name">
 
         </activity>
     </application>

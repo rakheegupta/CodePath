@@ -11,7 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+
 
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         String imageUrl = article.getThumbnailURL();
         if (!IsNullOrEmpty(imageUrl)) {
             ivThumbnail.setHeightRatio(((double) article.getHeight()) / article.getWidth());
-            Picasso.with(context).load(imageUrl).into(ivThumbnail);
+            Glide.with(context).load(imageUrl).into(ivThumbnail);
         }
         else {
             ivThumbnail.setHeightRatio(0);

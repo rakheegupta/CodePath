@@ -4,4 +4,5 @@
         <item>Oldest</item>
         <item>Newest</item>
     </string-array>
+    <string name="article_activity_name">Article</string>
 </resources>
