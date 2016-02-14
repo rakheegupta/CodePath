@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvTitle"
-            android:maxLines="2"
-            android:textSize="10dp"
+            android:maxLines="3"
+            android:textSize="15dp"
             android:layout_margin="2dp"
             />
     </LinearLayout>

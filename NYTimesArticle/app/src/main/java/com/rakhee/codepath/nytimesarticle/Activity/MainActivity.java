@@ -12,6 +12,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     int page;
     String query;
     boolean isFetching;
+    TextView tvBeginSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // Attach the adapter to the recyclerview to populate items
         rvArticles.setAdapter(mAdapter);
         // Set layout manager to position the items
-        final StaggeredGridLayoutManager slm= new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        final StaggeredGridLayoutManager slm= new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvArticles.setLayoutManager(slm);
         rvArticles.setItemAnimator(new SlideInUpAnimator());
         rvArticles.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -64,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < lastVisibleItemPositions.length; i++) {
                     if (i == 0) {
                         maxSize = lastVisibleItemPositions[i];
-                    }
-                    else if (lastVisibleItemPositions[i] > maxSize) {
+                    } else if (lastVisibleItemPositions[i] > maxSize) {
                         maxSize = lastVisibleItemPositions[i];
                     }
                 }
@@ -84,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-  
+
+        tvBeginSearch = (TextView) findViewById(R.id.tvBeginSearch);
     }
 
     private void fetchMore() {
@@ -131,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
                     mArticles.addAll(Article.fromJSONArray(response.getJSONObject("response").getJSONArray("docs")));
                     mAdapter.notifyDataSetChanged();
                     isFetching = false;
+
+                    tvBeginSearch.setVisibility(View.GONE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
