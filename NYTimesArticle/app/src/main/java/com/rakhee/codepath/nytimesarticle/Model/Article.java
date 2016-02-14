@@ -5,6 +5,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,13 +13,18 @@ import java.util.Random;
 /**
  * Created by varungupta on 2/9/16.
  */
+@Parcel
 public class Article {
 
-    private String title; // headline
-    private String url;
-    private String thumbnailURL;
-    private int width;
-    private int height;
+    public String title; // headline
+    public String url;
+    public String thumbnailURL;
+    public int width;
+    public int height;
+
+    public Article() {
+
+    }
 
     public Article(String title, String url) {
         this.title = title;

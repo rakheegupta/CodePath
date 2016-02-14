@@ -12,7 +12,10 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.rakhee.codepath.nytimesarticle.Model.Article;
 import com.rakhee.codepath.nytimesarticle.R;
+
+import org.parceler.Parcels;
 
 public class ArticleActivity extends AppCompatActivity {
 
@@ -21,7 +24,7 @@ public class ArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         WebView wvArticle=(WebView) findViewById(R.id.wvArticle);
-        String url=getIntent().getStringExtra("url");
+        Article article = (Article)Parcels.unwrap(getIntent().getParcelableExtra("article"));
         wvArticle.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -29,7 +32,7 @@ public class ArticleActivity extends AppCompatActivity {
                 return true;
             }
         });
-        wvArticle.loadUrl(url);
+        wvArticle.loadUrl(article.url);
     }
 
     @Override

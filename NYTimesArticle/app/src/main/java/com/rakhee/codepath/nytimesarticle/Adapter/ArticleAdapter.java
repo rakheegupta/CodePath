@@ -16,6 +16,8 @@ import com.rakhee.codepath.nytimesarticle.R;
 import com.rakhee.codepath.nytimesarticle.UI.DynamicHeightImageView;
 
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 /**
@@ -91,7 +93,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 Intent i =new Intent(context,ArticleActivity.class);
-                i.putExtra("url",article.getUrl());
+                i.putExtra("article", Parcels.wrap(article));
                 context.startActivity(i);
             }
         });
