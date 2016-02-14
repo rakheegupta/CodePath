@@ -28,6 +28,7 @@ import com.rakhee.codepath.nytimesarticle.Model.SearchFilters;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -90,7 +91,24 @@ public class MainActivity extends AppCompatActivity {
         tvBeginSearch = (TextView) findViewById(R.id.tvBeginSearch);
     }
 
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
+    }
+
     private void fetchMore() {
+
+        if (!isOnline()) {
+            Toast.makeText(MainActivity.this, "Network unavailable. Try again later.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         isFetching = true;
 
         String url="http://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -143,13 +161,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(MainActivity.this, "Network request failed", Toast.LENGTH_LONG);
+                Toast.makeText(MainActivity.this, "Network request failed", Toast.LENGTH_LONG).show();
                 isFetching = false;
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(MainActivity.this, "Network request failed", Toast.LENGTH_LONG);
+                Toast.makeText(MainActivity.this, "Network request failed", Toast.LENGTH_LONG).show();
                 isFetching = false;
             }
         });
