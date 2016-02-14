@@ -1,4 +1,4 @@
-package com.rakhee.codepath.nytimesarticle;
+package com.rakhee.codepath.nytimesarticle.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.rakhee.codepath.nytimesarticle.Activity.ArticleActivity;
+import com.rakhee.codepath.nytimesarticle.Model.Article;
+import com.rakhee.codepath.nytimesarticle.R;
+import com.rakhee.codepath.nytimesarticle.UI.DynamicHeightImageView;
 
 
 import java.util.List;

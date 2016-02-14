@@ -1,4 +1,4 @@
-package com.rakhee.codepath.nytimesarticle;
+package com.rakhee.codepath.nytimesarticle.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.rakhee.codepath.nytimesarticle.R;
 
 public class ArticleActivity extends AppCompatActivity {
 

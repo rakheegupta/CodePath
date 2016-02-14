@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.rakhee.codepath.nytimesarticle.DynamicHeightImageView
+        <com.rakhee.codepath.nytimesarticle.UI.DynamicHeightImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/ivThumbnail"

@@ -1,4 +1,4 @@
-package com.rakhee.codepath.nytimesarticle;
+package com.rakhee.codepath.nytimesarticle.UI;
 
 /**
  * Created by rakhe on 2/11/2016.

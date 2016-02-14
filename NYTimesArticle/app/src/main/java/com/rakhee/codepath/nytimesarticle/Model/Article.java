@@ -1,4 +1,4 @@
-package com.rakhee.codepath.nytimesarticle;
+package com.rakhee.codepath.nytimesarticle.Model;
 
 import android.util.Log;
 
@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
