@@ -3,12 +3,15 @@ package com.codepath.apps.simpleTweeter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -88,6 +91,16 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCompose);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(TimelineActivity.this, NewTweetActivity.class);
+                i.putExtra(EXTRA_ADD_TWEET_MESSAGE, user);
+                startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
+            }
+        });
     }
 
 
@@ -172,13 +185,6 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
-
-    public void composeActivity(MenuItem item) {
-        Intent i =new Intent(this,NewTweetActivity.class);
-        i.putExtra(EXTRA_ADD_TWEET_MESSAGE,user);
-        startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -238,7 +244,6 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.compose,menu);
-        MenuItem composeItem =menu.findItem(R.id.miComposeTweet);
         return true;
     }
 }
