@@ -19,6 +19,10 @@ public class User implements Serializable {
         return profilePicUrl;
     }
 
+    public String getScreenName() {
+        return screenName;
+    }
+
     private String profilePicUrl;
 
     public User(JSONObject object) {
@@ -27,6 +31,7 @@ public class User implements Serializable {
         try {
             name = object.getString("name");
             profilePicUrl=object.getString("profile_image_url");
+            screenName=object.getString("screen_name");
         } catch (JSONException e) {
             e.printStackTrace();
         }

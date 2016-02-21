@@ -23,6 +23,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,8 @@ public class TimelineActivity extends AppCompatActivity {
     TweeterClient client;
     ArrayList<Tweet> tweets;
     TweetAdapter tweetAdapter;
-    RequestParams params;
+    ListView lvTweets;
+
     boolean inCall;
     User user;
     public final static String EXTRA_ADD_TWEET_MESSAGE = "com.codepath.apps.simpleTweeter.TimelineActivity.EXTRA_ADD_TWEET_USER";
@@ -46,18 +48,16 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
+        lvTweets= (ListView) findViewById(R.id.lvTweets);
         tweets=new ArrayList<>();
         client = TwitterApplication.getRestClient();
 
         getUser();
         
         tweetAdapter = new TweetAdapter(this, tweets);
-        params= new RequestParams();
-        params.put("count", 25);
         inCall=false;
 
-        populateTimeline();
+        populateTimeline(0);
         lvTweets.setAdapter(tweetAdapter);
 
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
@@ -65,8 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
             public boolean onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
-                params.put("page", page);
-                populateTimeline();
+                populateTimeline(page);
                 // or customLoadMoreDataFromApi(totalItemsCount);
                 return true; // ONLY if more data is actually being loaded; false otherwise.
             }
@@ -80,7 +79,7 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                populateTimeline();
+                populateTimeline(0);
             }
         });
         // Configure the refreshing colors
@@ -91,10 +90,15 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
 
-    private void populateTimeline() {
+    private void populateTimeline(int page) {
         if (!inCall) {
             inCall=true;
-            client.getHomeTimeline(params, new JsonHttpResponseHandler() {
+
+            if (!isOnline()) {
+                Toast.makeText(TimelineActivity.this, "Network unavailable. Try again later.", Toast.LENGTH_LONG).show();
+                return;
+            }
+            client.getHomeTimeline(new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                             // Response is automatically parsed into a JSONArray
@@ -107,7 +111,8 @@ public class TimelineActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Log.d("DEBUG", "error:--------- " + errorResponse.toString());
+                            System.out.println("error:--------- " + errorResponse.toString());
+                            Log.e("DEBUG", "error:--------- " + errorResponse.toString());
                             Toast.makeText(TimelineActivity.this,"GET TIMELINE FAILED",Toast.LENGTH_LONG).show();
                             inCall=false;
                         }
@@ -118,11 +123,14 @@ public class TimelineActivity extends AppCompatActivity {
                             error.printStackTrace();
                             inCall=false;
                         }
-            });
+            },page);
         }
     }
     private void getUser(){
-
+        if (!isOnline()) {
+            Toast.makeText(TimelineActivity.this, "Network unavailable. Try again later.", Toast.LENGTH_LONG).show();
+            return;
+        }
         client.verifyCredentials(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -158,7 +166,7 @@ public class TimelineActivity extends AppCompatActivity {
 
 
     public void composeActivity(MenuItem item) {
-        Intent i =new Intent(this,ComposeActivity.class);
+        Intent i =new Intent(this,NewTweetActivity.class);
         i.putExtra(EXTRA_ADD_TWEET_MESSAGE,user);
         startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
     }
@@ -188,6 +196,7 @@ public class TimelineActivity extends AppCompatActivity {
                     Tweet newTweet=new Tweet(response);
                     tweets.add(0,newTweet);
                     tweetAdapter.notifyDataSetChanged();
+                    lvTweets.setSelectionAfterHeaderView();
                 }
 
                 @Override
@@ -197,6 +206,17 @@ public class TimelineActivity extends AppCompatActivity {
             });
         }
     }
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

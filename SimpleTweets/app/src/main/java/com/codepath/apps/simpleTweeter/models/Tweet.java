@@ -25,10 +25,26 @@ public class Tweet extends Model {
     // Define database columns and associated fields
     @Column(name = "tweetId")
     String tweetId;
-    @Column(name = "userName")
-    String userName;
+
+    public User getUser() {
+        return user;
+    }
+
+    @Column(name = "user")
+    User user;
     @Column(name = "timestamp")
     String timestamp;
+
+    public String getPhoto_url() {
+        return photo_url;
+    }
+
+    public void setPhoto_url(String photo_url) {
+        this.photo_url = photo_url;
+    }
+
+    @Column(name= "photo_url")
+    String photo_url;
 
     public void setText(String text) {
         this.text = text;
@@ -73,9 +89,7 @@ public class Tweet extends Model {
         return tweetId;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+
 
     @Column(name= "ppUrl")
     String profilePicUrl;
@@ -92,7 +106,18 @@ public class Tweet extends Model {
             this.timestamp = object.getString("created_at");
             this.text = object.getString("text");
             this.profilePicUrl=object.getJSONObject("user").getString("profile_image_url");
-            this.userName = object.getJSONObject("user").getString("screen_name");
+            user = new User(object.getJSONObject("user"));
+            this.photo_url = null;
+            JSONObject entities = object.getJSONObject("entities");
+            if (entities.has("media")) {
+                JSONArray mediaArray = entities.getJSONArray("media");
+                if (mediaArray.length() > 0) {
+                    JSONObject media = mediaArray.getJSONObject(0);
+                    if (media.getString("type").equals("photo")) {
+                        this.photo_url = mediaArray.getJSONObject(0).getString("media_url");
+                    }
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

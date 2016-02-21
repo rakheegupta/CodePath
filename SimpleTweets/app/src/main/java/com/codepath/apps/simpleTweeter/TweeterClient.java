@@ -30,8 +30,8 @@ import com.loopj.android.http.RequestParams;
 public class TweeterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "QRX6jqdb78flLaWpv6PYxGox1";       // Change this
-	public static final String REST_CONSUMER_SECRET = "I9STvejskn1wZDsAVfiY4woH3rw0e4UFNmi3aZUI3fOnKByig5"; // Change this
+	public static final String REST_CONSUMER_KEY = "XUk5aS1iWOJDztNFwU1zYQE6Y";       // Change this
+	public static final String REST_CONSUMER_SECRET = "iNwyTEBzzMDiTuIrqShAfe0P2DdVM0bMOd61icVmifO8mvitFL"; // Change this
 	public static final String REST_CALLBACK_URL = "oauth://tweeter"; // Change this (here and in manifest)
 
 
@@ -43,8 +43,11 @@ public class TweeterClient extends OAuthBaseClient {
 
 	// CHANGE THIS
 	// DEFINE METHODS for different API endpoints here
-	public void getHomeTimeline(RequestParams params, AsyncHttpResponseHandler handler) {
+	public void getHomeTimeline(AsyncHttpResponseHandler handler, int page) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("count", 25);
+		params.put("page", page);
 		// Can specify query string params directly or through RequestParams.
 		client.get(apiUrl, params, handler);
 	}
