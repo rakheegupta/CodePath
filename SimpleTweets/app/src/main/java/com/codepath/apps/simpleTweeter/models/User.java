@@ -2,18 +2,20 @@ package com.codepath.apps.simpleTweeter.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.io.Serializable;
 
 /**
  * Created by rakhe on 2/18/2016.
  */
+@Parcel
+public class User {
 
-public class User implements Serializable {
+     String name;
 
-    private String name;
-    private String UserId;
-    private String screenName;
+     String screenName;
+    String profilePicUrl;
 
     public String getProfilePicUrl() {
         return profilePicUrl;
@@ -23,7 +25,9 @@ public class User implements Serializable {
         return screenName;
     }
 
-    private String profilePicUrl;
+
+    public User() {
+    }
 
     public User(JSONObject object) {
         super();

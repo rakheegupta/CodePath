@@ -27,6 +27,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i =new Intent(TimelineActivity.this, NewTweetActivity.class);
-                i.putExtra(EXTRA_ADD_TWEET_MESSAGE, user);
+                i.putExtra(EXTRA_ADD_TWEET_MESSAGE, Parcels.wrap(user));
                 startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
             }
         });

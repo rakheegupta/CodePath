@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.models.User;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 
+import org.parceler.Parcels;
+
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class NewTweetActivity extends AppCompatActivity {
@@ -33,7 +35,7 @@ public class NewTweetActivity extends AppCompatActivity {
       //  getSupportActionBar().setCustomView(R.layout.action_bar_title);
 
         TextView tvName = (TextView) findViewById(R.id.tvUserName);
-        User user=(User)getIntent().getSerializableExtra(TimelineActivity.EXTRA_ADD_TWEET_MESSAGE);
+        User user=(User) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.EXTRA_ADD_TWEET_MESSAGE));
         tvName.setText(user.getName());
 
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);

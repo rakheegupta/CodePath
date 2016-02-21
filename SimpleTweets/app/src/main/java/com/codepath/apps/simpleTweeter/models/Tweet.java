@@ -10,6 +10,7 @@ import com.activeandroid.annotation.Table;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,21 +21,33 @@ import java.util.Date;
 /**
  * Created by rakhe on 2/17/2016.
  */
+@Parcel(analyze={Tweet.class})
 @Table(name = "Tweets")
 public class Tweet extends Model {
     // Define database columns and associated fields
     @Column(name = "tweetId")
     String tweetId;
 
-    public User getUser() {
-        return user;
-    }
-
     @Column(name = "user")
     User user;
+
     @Column(name = "timestamp")
     String timestamp;
 
+    @Column(name= "photo_url")
+    String photo_url;
+
+
+    @Column(name = "text")
+    String text;
+
+    @Column(name= "ppUrl")
+    String profilePicUrl;
+
+
+    public void setText(String text) {
+        this.text = text;
+    }
     public String getPhoto_url() {
         return photo_url;
     }
@@ -43,15 +56,10 @@ public class Tweet extends Model {
         this.photo_url = photo_url;
     }
 
-    @Column(name= "photo_url")
-    String photo_url;
 
-    public void setText(String text) {
-        this.text = text;
+    public User getUser() {
+        return user;
     }
-
-    @Column(name = "text")
-    String text;
 
     public String getProfilePicUrl() {
         return profilePicUrl;
@@ -91,8 +99,6 @@ public class Tweet extends Model {
 
 
 
-    @Column(name= "ppUrl")
-    String profilePicUrl;
 
     // Make sure to always define this constructor with no arguments
     public Tweet() {
