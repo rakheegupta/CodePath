@@ -2,6 +2,7 @@ package com.codepath.apps.simpleTweeter.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,50 +26,91 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 /**
  * Created by rakhe on 2/18/2016.
  */
-public class TweetAdapter extends ArrayAdapter<Tweet> {
+public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView ivPhoto;
+        public TextView tvUserName;
+        public TextView tvScreenName;
+        public TextView tvTimeStamp;
+        public TextView tvText;
+        public ImageView ivMediaPhoto;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            ivPhoto =(ImageView)itemView.findViewById(R.id.ivProfilePic);
+            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+            tvScreenName = (TextView) itemView.findViewById(R.id.tvScreenName);
+            tvTimeStamp =(TextView) itemView.findViewById(R.id.tvTiemStamp);
+            tvText= (TextView) itemView.findViewById(R.id.tvText);
+            ivMediaPhoto = (ImageView) itemView.findViewById(R.id.ivMedia);
+        }
+    }
+
+    private List<Tweet> mTweets;
+    Context mContext;
+
     public TweetAdapter(Context context, List<Tweet> tweets) {
-        super(context, android.R.layout.simple_list_item_1, tweets);
+        mContext = context;
+        mTweets = tweets;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView==null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.tweet_item,parent,false);
-        }
-        Tweet tweet = getItem(position);
-        // Set image
-        ImageView ivPhoto =(ImageView)convertView.findViewById(R.id.ivProfilePic);
+    public TweetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        Glide.with(getContext())
+        // Inflate the custom layout
+        View view = inflater.inflate(R.layout.tweet_item, parent, false);
+
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
+    }
+
+    // Involves populating data into the item through holder
+    @Override
+    public void onBindViewHolder(TweetAdapter.ViewHolder viewHolder, int position) {
+        // Get the data model based on position
+        Tweet tweet = mTweets.get(position);
+
+        // Set image
+
+        Glide.with(mContext)
                 .load(tweet.getProfilePicUrl())
-                .bitmapTransform(new RoundedCornersTransformation(getContext(), 4, 1, RoundedCornersTransformation.CornerType.ALL))
-                .into(ivPhoto);
-        //Picasso.with(getContext()).load(tweet.getProfilePicUrl()).into(ivPhoto);
+                .bitmapTransform(new RoundedCornersTransformation(mContext, 4, 1, RoundedCornersTransformation.CornerType.ALL))
+                .into(viewHolder.ivPhoto);
+        //Picasso.with(mContext).load(tweet.getProfilePicUrl()).into(ivPhoto);
 
         //set user name
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        tvUserName.setText(tweet.getUser().getName());
+        viewHolder.tvUserName.setText(tweet.getUser().getName());
 
         //screenname
-        TextView tvScreenName = (TextView) convertView.findViewById(R.id.tvScreenName);
-        tvScreenName.setText("@"+tweet.getUser().getScreenName());
+        viewHolder.tvScreenName.setText("@"+tweet.getUser().getScreenName());
+
         //set timestamp
-        TextView tvTimeStamp =(TextView) convertView.findViewById(R.id.tvTiemStamp);
-        tvTimeStamp.setText(tweet.getTimestamp());
+        viewHolder.tvTimeStamp.setText(tweet.getTimestamp());
 
         //set text
-        TextView tvText= (TextView) convertView.findViewById(R.id.tvText);
-        tvText.setText(tweet.getText());
+        viewHolder.tvText.setText(tweet.getText());
 
 
         //photo
 
-        ImageView ivMediaPhoto = (ImageView) convertView.findViewById(R.id.ivMedia);
         if(tweet.getPhoto_url()!=null) {
-            ivMediaPhoto.setVisibility(View.VISIBLE);
-            Glide.with(getContext()).load(tweet.getPhoto_url()).into(ivMediaPhoto);
-        }else
-        ivMediaPhoto.setVisibility(View.GONE);
-        return convertView;
+            viewHolder.ivMediaPhoto.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(tweet.getPhoto_url()).into(viewHolder.ivMediaPhoto);
+        }else {
+            viewHolder.ivMediaPhoto.setVisibility(View.GONE);
+        }
+
+    }
+
+    // Return the total count of items
+    @Override
+    public int getItemCount() {
+        return mTweets.size();
     }
 }

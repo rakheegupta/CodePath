@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweeterClient client;
     ArrayList<Tweet> tweets;
     TweetAdapter tweetAdapter;
-    ListView lvTweets;
+    RecyclerView rvTweets;
 
     boolean inCall;
     User user;
@@ -52,7 +53,7 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-        lvTweets= (ListView) findViewById(R.id.lvTweets);
+        rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         tweets=new ArrayList<>();
         client = TwitterApplication.getRestClient();
 
@@ -62,16 +63,16 @@ public class TimelineActivity extends AppCompatActivity {
         inCall=false;
 
         populateTimeline(0);
-        lvTweets.setAdapter(tweetAdapter);
+        rvTweets.setAdapter(tweetAdapter);
 
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(layoutManager);
+        rvTweets.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
-            public boolean onLoadMore(int page, int totalItemsCount) {
+            public void onLoadMore(int page) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to your AdapterView
                 populateTimeline(page);
-                // or customLoadMoreDataFromApi(totalItemsCount);
-                return true; // ONLY if more data is actually being loaded; false otherwise.
             }
         });
 
@@ -113,38 +114,39 @@ public class TimelineActivity extends AppCompatActivity {
 
             inCall=true;
             client.getHomeTimeline(new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            // Response is automatically parsed into a JSONArray
-                            // json.getJSONObject(0).getLong("id");
-                            Log.d("DEBUG", "timeline: " + response.toString());
-                            if (page == 0){
-                                tweets.clear();
-                            }
-                            tweets.addAll(Tweet.fromJson(response));
-                            tweetAdapter.notifyDataSetChanged();
-                            inCall=false;
-                            mSwipeContainer.setRefreshing(false);
-                        }
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            System.out.println("error:--------- " + errorResponse.toString());
-                            Log.e("DEBUG", "error:--------- " + errorResponse.toString());
-                            Toast.makeText(TimelineActivity.this,"GET TIMELINE FAILED",Toast.LENGTH_LONG).show();
-                            try{
-                                Toast.makeText(TimelineActivity.this,errorResponse.getString("message"),Toast.LENGTH_SHORT).show();
-                            }catch (JSONException e){
-                                e.printStackTrace();
-                            }
-                            inCall=false;
-                        }
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    // Response is automatically parsed into a JSONArray
+                    // json.getJSONObject(0).getLong("id");
+                    Log.d("DEBUG", "timeline: " + response.toString());
+                    if (page == 0) {
+                        tweets.clear();
+                    }
+                    tweets.addAll(Tweet.fromJson(response));
+                    tweetAdapter.notifyDataSetChanged();
+                    inCall = false;
+                    mSwipeContainer.setRefreshing(false);
+                }
 
-                        @Override
-                        public void onUserException(Throwable error) {
-                            android.util.Log.d("debug","eror"+error.getLocalizedMessage());
-                            error.printStackTrace();
-                            inCall=false;
-                        }
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    System.out.println("error:--------- " + errorResponse.toString());
+                    Log.e("DEBUG", "error:--------- " + errorResponse.toString());
+                    Toast.makeText(TimelineActivity.this, "GET TIMELINE FAILED", Toast.LENGTH_LONG).show();
+                    try {
+                        Toast.makeText(TimelineActivity.this, errorResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    inCall = false;
+                }
+
+                @Override
+                public void onUserException(Throwable error) {
+                    android.util.Log.d("debug", "eror" + error.getLocalizedMessage());
+                    error.printStackTrace();
+                    inCall = false;
+                }
             },page);
         }
     }
@@ -163,16 +165,16 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d("debug", "user not found");
-                Toast.makeText(TimelineActivity.this,responseString,Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineActivity.this, responseString, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("debug", "user not found");
-               // Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
-                try{
-                    Toast.makeText(TimelineActivity.this,errorResponse.getString("message"),Toast.LENGTH_SHORT).show();
-                }catch (JSONException e){
+                // Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(TimelineActivity.this, errorResponse.getString("message"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -180,7 +182,7 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onUserException(Throwable error) {
                 Log.d("debug", "user not found");
-                Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineActivity.this, "User not found", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -218,7 +220,7 @@ public class TimelineActivity extends AppCompatActivity {
                     Tweet newTweet=new Tweet(response);
                     tweets.add(0,newTweet);
                     tweetAdapter.notifyDataSetChanged();
-                    lvTweets.setSelectionAfterHeaderView();
+                    rvTweets.smoothScrollToPosition(0);
                 }
 
                 @Override
