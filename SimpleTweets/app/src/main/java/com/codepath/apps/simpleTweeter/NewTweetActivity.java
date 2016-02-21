@@ -15,10 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.models.User;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class NewTweetActivity extends AppCompatActivity {
     EditText etTweet;
@@ -38,17 +39,9 @@ public class NewTweetActivity extends AppCompatActivity {
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
         //Picasso.with(this).load(user.getProfilePicUrl()).into(ivUserPhoto);
 
-        Transformation transformation = new RoundedTransformationBuilder()
-                .borderColor(Color.GRAY)
-                .borderWidthDp(1)
-                .cornerRadiusDp(4)
-                .oval(false)
-                .build();
-
-        Picasso.with(this)
+        Glide.with(this)
                 .load(user.getProfilePicUrl())
-                .fit()
-                .transform(transformation)
+                .bitmapTransform(new RoundedCornersTransformation(this, 4, 1, RoundedCornersTransformation.CornerType.ALL))
                 .into(ivUserPhoto);
         etTweet = (EditText) findViewById(R.id.etTweet);
 

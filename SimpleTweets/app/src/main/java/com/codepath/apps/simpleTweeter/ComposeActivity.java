@@ -11,9 +11,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.models.Tweet;
 import com.codepath.apps.simpleTweeter.models.User;
-import com.squareup.picasso.Picasso;
 
 public class ComposeActivity extends AppCompatActivity {
     Tweet newTweet;
@@ -47,7 +47,7 @@ public class ComposeActivity extends AppCompatActivity {
         tvName.setText(user.getName());
 
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
-        Picasso.with(this).load(user.getProfilePicUrl()).into(ivUserPhoto);
+        Glide.with(this).load(user.getProfilePicUrl()).into(ivUserPhoto);
         etTweet = (EditText) findViewById(R.id.etTweet);
     }
 }

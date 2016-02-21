@@ -10,16 +10,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.R;
 import com.codepath.apps.simpleTweeter.models.Tweet;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 
 import org.w3c.dom.Text;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by rakhe on 2/18/2016.
@@ -37,17 +38,10 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
         Tweet tweet = getItem(position);
         // Set image
         ImageView ivPhoto =(ImageView)convertView.findViewById(R.id.ivProfilePic);
-        Transformation transformation = new RoundedTransformationBuilder()
-                .borderColor(Color.GRAY)
-                .borderWidthDp(1)
-                .cornerRadiusDp(4)
-                .oval(false)
-                .build();
 
-        Picasso.with(getContext())
+        Glide.with(getContext())
                 .load(tweet.getProfilePicUrl())
-                .fit()
-                .transform(transformation)
+                .bitmapTransform(new RoundedCornersTransformation(getContext(), 4, 1, RoundedCornersTransformation.CornerType.ALL))
                 .into(ivPhoto);
         //Picasso.with(getContext()).load(tweet.getProfilePicUrl()).into(ivPhoto);
 
@@ -72,7 +66,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> {
         ImageView ivMediaPhoto = (ImageView) convertView.findViewById(R.id.ivMedia);
         if(tweet.getPhoto_url()!=null) {
             ivMediaPhoto.setVisibility(View.VISIBLE);
-            Picasso.with(getContext()).load(tweet.getPhoto_url()).into(ivMediaPhoto);
+            Glide.with(getContext()).load(tweet.getPhoto_url()).into(ivMediaPhoto);
         }else
         ivMediaPhoto.setVisibility(View.GONE);
         return convertView;
