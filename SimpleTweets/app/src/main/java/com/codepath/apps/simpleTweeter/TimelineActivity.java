@@ -91,20 +91,23 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
 
-    private void populateTimeline(int page) {
+    private void populateTimeline(final int page) {
         if (!inCall) {
-            inCall=true;
-
             if (!isOnline()) {
                 Toast.makeText(TimelineActivity.this, "Network unavailable. Try again later.", Toast.LENGTH_LONG).show();
                 return;
             }
+
+            inCall=true;
             client.getHomeTimeline(new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                             // Response is automatically parsed into a JSONArray
                             // json.getJSONObject(0).getLong("id");
                             Log.d("DEBUG", "timeline: " + response.toString());
+                            if (page == 0){
+                                tweets.clear();
+                            }
                             tweets.addAll(Tweet.fromJson(response));
                             tweetAdapter.notifyDataSetChanged();
                             inCall=false;
