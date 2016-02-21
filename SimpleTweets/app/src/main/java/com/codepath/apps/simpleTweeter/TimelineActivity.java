@@ -21,6 +21,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -114,6 +115,11 @@ public class TimelineActivity extends AppCompatActivity {
                             System.out.println("error:--------- " + errorResponse.toString());
                             Log.e("DEBUG", "error:--------- " + errorResponse.toString());
                             Toast.makeText(TimelineActivity.this,"GET TIMELINE FAILED",Toast.LENGTH_LONG).show();
+                            try{
+                                Toast.makeText(TimelineActivity.this,errorResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }
                             inCall=false;
                         }
 
@@ -141,19 +147,18 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.d("debug", "user not found");
-                Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("debug", "user not found");
-                Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
+                Toast.makeText(TimelineActivity.this,responseString,Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("debug", "user not found");
-                Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(TimelineActivity.this,"User not found",Toast.LENGTH_SHORT).show();
+                try{
+                    Toast.makeText(TimelineActivity.this,errorResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -177,18 +182,26 @@ public class TimelineActivity extends AppCompatActivity {
 
         if (resultCode == Activity.RESULT_OK) {
             String newTweetText = data.getStringExtra(EXTRA_ADD_TWEET_RESULT);
-            Toast.makeText(this,newTweetText,Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this,newTweetText,Toast.LENGTH_SHORT).show();
             client.postTweet(newTweetText,new JsonHttpResponseHandler(){
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     Log.d("debug", "unable to add tweet");
-                    Toast.makeText(TimelineActivity.this,responseString,Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(TimelineActivity.this,responseString,Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     Log.d("debug", "unable to add tweet");
-                    Toast.makeText(TimelineActivity.this,errorResponse.toString(),Toast.LENGTH_SHORT).show();
+                    try{
+
+                        if (errorResponse!=null)
+                        Toast.makeText(TimelineActivity.this,errorResponse.getString("message"),Toast.LENGTH_SHORT).show();
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override

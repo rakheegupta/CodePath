@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,8 +27,9 @@ public class NewTweetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_tweet);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+      //  getSupportActionBar().setCustomView(R.layout.action_bar_title);
 
         TextView tvName = (TextView) findViewById(R.id.tvUserName);
         User user=(User)getIntent().getSerializableExtra(TimelineActivity.EXTRA_ADD_TWEET_MESSAGE);
@@ -50,7 +52,7 @@ public class NewTweetActivity extends AppCompatActivity {
                 .into(ivUserPhoto);
         etTweet = (EditText) findViewById(R.id.etTweet);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,12 +66,12 @@ public class NewTweetActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+*/
         TextView tvScreenName = (TextView) findViewById(R.id.tvUserScreenName);
         tvScreenName.setText("@"+user.getScreenName());
     }
 
-    public void submitTweet(MenuItem item) {
+    public void submitTweet(View v) {
         // Close activity and send back new text
         String newTweetText = etTweet.getText().toString();
         Intent resultIntent = new Intent();

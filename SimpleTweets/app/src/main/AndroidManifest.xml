@@ -63,6 +63,7 @@
         <activity android:name=".NewTweetActivity"
             android:label=""
             android:parentActivityName=".TimelineActivity"
+            android:theme="@style/DialogTheme"
             >
             <meta-data
             android:name="android.support.PARENT_ACTIVITY"

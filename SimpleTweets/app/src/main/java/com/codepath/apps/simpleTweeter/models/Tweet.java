@@ -115,6 +115,8 @@ public class Tweet extends Model {
                     JSONObject media = mediaArray.getJSONObject(0);
                     if (media.getString("type").equals("photo")) {
                         this.photo_url = mediaArray.getJSONObject(0).getString("media_url");
+                    }else if (media.getString("type").equals("video")) {
+
                     }
                 }
             }
