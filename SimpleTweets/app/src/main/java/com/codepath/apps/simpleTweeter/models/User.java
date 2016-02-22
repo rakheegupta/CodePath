@@ -3,6 +3,7 @@ package com.codepath.apps.simpleTweeter.models;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,5 +54,9 @@ public class User extends Model {
 
     public String getName() {
         return name;
+    }
+
+    public static User getCurrentUser() {
+        return new Select().from(User.class).where("remote_id = 0").executeSingle();
     }
 }

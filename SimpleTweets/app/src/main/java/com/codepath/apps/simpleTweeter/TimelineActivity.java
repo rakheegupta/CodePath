@@ -57,6 +57,12 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         tweets=new ArrayList<>();
         tweets.addAll(Tweet.fetchAll());
+
+        user = User.getCurrentUser();
+        if (user != null) {
+            getSupportActionBar().setTitle(user.getName());
+        }
+
         client = TwitterApplication.getRestClient();
 
         getUser();
@@ -161,6 +167,8 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 user = new User(response);
+                user.remoteId = 0;
+                user.save();
                 getSupportActionBar().setTitle(user.getName());
             }
 
