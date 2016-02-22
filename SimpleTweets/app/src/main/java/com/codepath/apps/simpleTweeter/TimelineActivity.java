@@ -230,7 +230,12 @@ public class TimelineActivity extends AppCompatActivity {
                     Tweet newTweet=new Tweet(response);
                     tweets.add(0,newTweet);
                     tweetAdapter.notifyDataSetChanged();
-                    rvTweets.smoothScrollToPosition(0);
+                    rvTweets.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            rvTweets.scrollToPosition(0);
+                        }
+                    }, 1000);
                 }
 
                 @Override

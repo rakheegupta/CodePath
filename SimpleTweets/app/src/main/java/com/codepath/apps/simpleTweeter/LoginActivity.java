@@ -31,7 +31,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TweeterClient> {
 
         // Intent i = new Intent(this, PhotosActivity.class);
 		// startActivity(i);
-        Toast.makeText(this,"connected",Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, TimelineActivity.class);
         startActivity(i);
     }
