@@ -49,7 +49,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         }
     }
 
-    private List<Tweet> mTweets;
+    private List< com.codepath.apps.simpleTweeter.models.Tweet> mTweets;
     Context mContext;
 
     public TweetAdapter(Context context, List<Tweet> tweets) {
@@ -79,7 +79,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // Set image
 
         Glide.with(mContext)
-                .load(tweet.getProfilePicUrl())
+                .load(tweet.getUser().getProfilePicUrl())
                 .bitmapTransform(new RoundedCornersTransformation(mContext, 4, 1, RoundedCornersTransformation.CornerType.ALL))
                 .into(viewHolder.ivPhoto);
         //Picasso.with(mContext).load(tweet.getProfilePicUrl()).into(ivPhoto);

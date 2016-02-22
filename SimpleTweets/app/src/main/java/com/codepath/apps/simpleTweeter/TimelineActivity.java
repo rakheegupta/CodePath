@@ -56,6 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         tweets=new ArrayList<>();
+        tweets.addAll(Tweet.fetchAll());
         client = TwitterApplication.getRestClient();
 
         getUser();

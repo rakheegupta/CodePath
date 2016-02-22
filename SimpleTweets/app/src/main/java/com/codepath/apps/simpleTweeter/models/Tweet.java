@@ -6,6 +6,7 @@ import android.text.format.Time;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by rakhe on 2/17/2016.
@@ -25,10 +27,13 @@ import java.util.Date;
 @Table(name = "Tweets")
 public class Tweet extends Model {
     // Define database columns and associated fields
+    // This is the unique id given by the server
+    @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public long remoteId;
     @Column(name = "tweetId")
     String tweetId;
 
-    @Column(name = "user")
+    @Column(name = "user",  onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     User user;
 
     @Column(name = "timestamp")
@@ -40,9 +45,6 @@ public class Tweet extends Model {
 
     @Column(name = "text")
     String text;
-
-    @Column(name= "ppUrl")
-    String profilePicUrl;
 
 
     public void setText(String text) {
@@ -61,9 +63,6 @@ public class Tweet extends Model {
         return user;
     }
 
-    public String getProfilePicUrl() {
-        return profilePicUrl;
-    }
 
     public String getText() {
         return text;
@@ -108,11 +107,16 @@ public class Tweet extends Model {
         super();
 
         try {
+            this.remoteId = object.getLong("id");
             this.tweetId = object.getString("id_str");
             this.timestamp = object.getString("created_at");
             this.text = object.getString("text");
-            this.profilePicUrl=object.getJSONObject("user").getString("profile_image_url");
-            user = new User(object.getJSONObject("user"));
+            long rId = object.getJSONObject("user").getLong("id"); // get just the remote id
+            user = new Select().from(User.class).where("remote_id = ?", rId).executeSingle();
+            if (user == null) {
+                user = new User(object.getJSONObject("user"));
+                user.save();
+            }
             this.photo_url = null;
             JSONObject entities = object.getJSONObject("entities");
             if (entities.has("media")) {
@@ -144,10 +148,14 @@ public class Tweet extends Model {
             }
 
             Tweet tweet = new Tweet(tweetJson);
-            //tweet.save();
+            tweet.save();
             tweets.add(tweet);
         }
 
         return tweets;
+    }
+
+    public static List<Tweet> fetchAll() {
+        return new Select().from(Tweet.class).orderBy("timestamp DESC").execute();
     }
 }
