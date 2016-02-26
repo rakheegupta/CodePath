@@ -1,11 +1,12 @@
-package com.codepath.apps.simpleTweeter;
+package com.codepath.apps.simpleTweeter.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
+import com.codepath.apps.simpleTweeter.R;
+import com.codepath.apps.simpleTweeter.TweeterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TweeterClient> {
@@ -31,7 +32,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TweeterClient> {
 
         // Intent i = new Intent(this, PhotosActivity.class);
 		// startActivity(i);
-        Intent i = new Intent(this, TimelineActivity.class);
+        Intent i = new Intent(this, com.codepath.apps.simpleTweeter.Activities.TimelinesActivity.class);
         startActivity(i);
     }
 

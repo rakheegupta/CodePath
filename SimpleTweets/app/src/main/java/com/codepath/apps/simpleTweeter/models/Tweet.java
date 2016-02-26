@@ -155,7 +155,12 @@ public class Tweet extends Model {
         return tweets;
     }
 
-    public static List<Tweet> fetchAll() {
+    public static List<Tweet> fetchAllHome() {
+        return new Select().from(Tweet.class).orderBy("timestamp DESC").execute();
+    }
+
+
+    public static List<Tweet> fetchAllMentions() {
         return new Select().from(Tweet.class).orderBy("timestamp DESC").execute();
     }
 }

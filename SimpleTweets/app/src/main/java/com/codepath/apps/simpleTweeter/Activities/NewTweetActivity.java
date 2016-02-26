@@ -1,10 +1,6 @@
-package com.codepath.apps.simpleTweeter;
+package com.codepath.apps.simpleTweeter.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.simpleTweeter.R;
 import com.codepath.apps.simpleTweeter.models.User;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 
 import org.parceler.Parcels;
 
@@ -35,7 +31,7 @@ public class NewTweetActivity extends AppCompatActivity {
       //  getSupportActionBar().setCustomView(R.layout.action_bar_title);
 
         TextView tvName = (TextView) findViewById(R.id.tvUserName);
-        User user=(User) Parcels.unwrap(getIntent().getParcelableExtra(TimelineActivity.EXTRA_ADD_TWEET_MESSAGE));
+        User user=(User) Parcels.unwrap(getIntent().getParcelableExtra(TimelinesActivity.EXTRA_ADD_TWEET_MESSAGE));
         tvName.setText(user.getName());
 
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
@@ -56,7 +52,7 @@ public class NewTweetActivity extends AppCompatActivity {
                 // Close activity and send back new text
                 String newTweetText = etTweet.getText().toString();
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra(TimelineActivity.EXTRA_ADD_TWEET_RESULT, newTweetText);
+                resultIntent.putExtra(TimelinesActivity.EXTRA_ADD_TWEET_RESULT, newTweetText);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
@@ -70,7 +66,7 @@ public class NewTweetActivity extends AppCompatActivity {
         // Close activity and send back new text
         String newTweetText = etTweet.getText().toString();
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(TimelineActivity.EXTRA_ADD_TWEET_RESULT, newTweetText);
+        resultIntent.putExtra(TimelinesActivity.EXTRA_ADD_TWEET_RESULT, newTweetText);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
