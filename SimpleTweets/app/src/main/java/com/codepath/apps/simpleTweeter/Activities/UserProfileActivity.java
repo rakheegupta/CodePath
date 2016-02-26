@@ -3,6 +3,8 @@ package com.codepath.apps.simpleTweeter.Activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.codepath.apps.simpleTweeter.R;
+
 public class UserProfileActivity extends AppCompatActivity {
 
     @Override
