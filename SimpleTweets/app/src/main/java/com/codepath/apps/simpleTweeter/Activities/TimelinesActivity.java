@@ -7,21 +7,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.util.Log;
-import com.codepath.apps.simpleTweeter.Fragments.HomeFragment;
+import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.Fragments.TimelineFragment;
 import com.codepath.apps.simpleTweeter.R;
-import com.codepath.apps.simpleTweeter.TweeterClient;
 import com.codepath.apps.simpleTweeter.TwitterApplication;
 import com.codepath.apps.simpleTweeter.adapters.TweetFragmentsPagerAdapter;
 import com.codepath.apps.simpleTweeter.models.Tweet;
 import com.codepath.apps.simpleTweeter.models.User;
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,6 +32,8 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.IOException;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by rakhe on 2/17/2016.
@@ -56,7 +59,7 @@ public class TimelinesActivity extends AppCompatActivity {
         //set up the user
         user = User.getCurrentUser();
         if (user != null) {
-            getSupportActionBar().setTitle(user.getName());
+            setUpActionBar();
         }
         getUser();
 
@@ -77,11 +80,41 @@ public class TimelinesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i =new Intent(TimelinesActivity.this, NewTweetActivity.class);
+                Intent i = new Intent(TimelinesActivity.this, NewTweetActivity.class);
                 i.putExtra(EXTRA_ADD_TWEET_MESSAGE, Parcels.wrap(user));
                 startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
             }
         });
+
+
+    }
+
+    private void setUpActionBar(){
+        //setup actionbar for this activity
+        if (user != null) {
+            getSupportActionBar().setCustomView(R.layout.user_photo);
+
+            ImageView userProfilePhoto = (ImageView) getSupportActionBar().getCustomView().findViewById(R.id.acProfilePic);
+            Glide.with(this)
+                    .load(user.getProfile_image_url())
+                    .bitmapTransform(new RoundedCornersTransformation(this, 4, 1, RoundedCornersTransformation.CornerType.ALL))
+                    .into(userProfilePhoto);
+            userProfilePhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i =new Intent(TimelinesActivity.this,UserProfileActivity.class);
+                    i.putExtra("user",Parcels.wrap(user));
+                    startActivity(i);
+                }
+            });
+
+            TextView userName =(TextView) getSupportActionBar().getCustomView().findViewById(R.id.acTitle);
+            userName.setText(user.getName());
+            TextView userHandle =(TextView) getSupportActionBar().getCustomView().findViewById(R.id.acHandle);
+            userHandle.setText("@"+ user.getScreen_name());
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
+                    | ActionBar.DISPLAY_SHOW_HOME);
+        }
     }
 
     private void getUser(){
@@ -92,10 +125,11 @@ public class TimelinesActivity extends AppCompatActivity {
         TwitterApplication.getRestClient().verifyCredentials(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = new User(response);
-                user.remoteId = 0;
+               // user =  new Gson().fromJson(response.toString(), User.class);
+                user=new User(response);
+                user.dummy_id = 0;
                 user.save();
-                getSupportActionBar().setTitle(user.getName());
+                setUpActionBar();
             }
 
             @Override
@@ -179,14 +213,6 @@ public class TimelinesActivity extends AppCompatActivity {
         } catch (IOException e)          { e.printStackTrace(); }
         catch (InterruptedException e) { e.printStackTrace(); }
         return false;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile, menu);
-        return true;
     }
 
     public TimelineFragment getFragment(int position){

@@ -35,10 +35,10 @@ public class NewTweetActivity extends AppCompatActivity {
         tvName.setText(user.getName());
 
         ImageView ivUserPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
-        //Picasso.with(this).load(user.getProfilePicUrl()).into(ivUserPhoto);
+        //Picasso.with(this).load(user.getProfile_image_url()).into(ivUserPhoto);
 
         Glide.with(this)
-                .load(user.getProfilePicUrl())
+                .load(user.getProfile_image_url())
                 .bitmapTransform(new RoundedCornersTransformation(this, 4, 1, RoundedCornersTransformation.CornerType.ALL))
                 .into(ivUserPhoto);
         etTweet = (EditText) findViewById(R.id.etTweet);
@@ -59,7 +59,7 @@ public class NewTweetActivity extends AppCompatActivity {
         });
 */
         TextView tvScreenName = (TextView) findViewById(R.id.tvUserScreenName);
-        tvScreenName.setText("@"+user.getScreenName());
+        tvScreenName.setText("@"+user.getScreen_name());
     }
 
     public void submitTweet(View v) {

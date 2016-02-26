@@ -1,23 +1,22 @@
 package com.codepath.apps.simpleTweeter.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.simpleTweeter.Activities.UserProfileActivity;
 import com.codepath.apps.simpleTweeter.R;
 import com.codepath.apps.simpleTweeter.models.Tweet;
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 
 
-import org.w3c.dom.Text;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -74,21 +73,30 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(TweetAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Tweet tweet = mTweets.get(position);
+        final Tweet tweet = mTweets.get(position);
 
         // Set image
 
         Glide.with(mContext)
-                .load(tweet.getUser().getProfilePicUrl())
+                .load(tweet.getUser().getProfile_image_url())
                 .bitmapTransform(new RoundedCornersTransformation(mContext, 4, 1, RoundedCornersTransformation.CornerType.ALL))
                 .into(viewHolder.ivPhoto);
-        //Picasso.with(mContext).load(tweet.getProfilePicUrl()).into(ivPhoto);
+
+        viewHolder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext,UserProfileActivity.class);
+                i.putExtra("user", Parcels.wrap(tweet.getUser()));
+                mContext.startActivity(i);
+            }
+        });
+        //Picasso.with(mContext).load(tweet.getProfile_image_url()).into(ivPhoto);
 
         //set user name
         viewHolder.tvUserName.setText(tweet.getUser().getName());
 
         //screenname
-        viewHolder.tvScreenName.setText("@"+tweet.getUser().getScreenName());
+        viewHolder.tvScreenName.setText("@"+tweet.getUser().getScreen_name());
 
         //set timestamp
         viewHolder.tvTimeStamp.setText(tweet.getTimestamp());

@@ -82,4 +82,22 @@ public class TweeterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("account/verify_credentials.json");
 		client.get(apiUrl, handler);
 	}
+
+	public void getUserTimeline(long user_id, int page, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("count", 50);
+		params.put("since_id", 1);
+		params.put("contributor_details", true);
+
+		if (user_id != 0){
+			params.put("user_id", user_id);
+		}
+
+		if (page != 0) {
+			params.put("page", page);
+		}
+		client.get(apiUrl, params, handler);
+	}
 }
