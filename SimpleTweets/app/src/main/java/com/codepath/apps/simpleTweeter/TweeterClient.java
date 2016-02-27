@@ -100,4 +100,19 @@ public class TweeterClient extends OAuthBaseClient {
 		}
 		client.get(apiUrl, params, handler);
 	}
+
+	public void getUserFollowers(long user_id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("followers/list.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id",user_id);
+		params.put("count",25);
+		client.get(apiURL,params,handler);
+	}
+	public void getUserFollowing(long user_id, AsyncHttpResponseHandler handler) {
+		String apiURL = getApiUrl("friends/list.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id",user_id);
+		params.put("count",25);
+		client.get(apiURL,params,handler);
+	}
 }

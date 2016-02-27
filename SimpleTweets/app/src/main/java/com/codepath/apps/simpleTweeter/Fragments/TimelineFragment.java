@@ -178,6 +178,8 @@ public class TimelineFragment extends Fragment {
                 }
                 System.out.println("loading more results" + page);
                 tweets.addAll(Tweet.fromJson(response));
+                int curSize = tweetAdapter.getItemCount();
+                //tweetAdapter.notifyItemRangeInserted(curSize, tweets.size() - 1);
                 tweetAdapter.notifyDataSetChanged();
                 // Try to get more tweets only if we got something in this try
                 // This is to ensure no infinite loop

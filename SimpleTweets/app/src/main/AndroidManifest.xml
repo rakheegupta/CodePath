@@ -60,7 +60,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activities.TimelinesActivity"/>
         </activity>
-        <activity android:name=".Activities.UserProfileActivity">
+        <activity
+            android:name=".Activities.UserProfileActivity"
+            android:parentActivityName=".Activities.TimelinesActivity">
+        </activity>
+        <activity android:name=".Activities.UsersListActivity"
+                  >
         </activity>
     </application>
 
