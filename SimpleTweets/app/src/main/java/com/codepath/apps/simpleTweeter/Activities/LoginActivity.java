@@ -15,6 +15,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TweeterClient> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
 	}
 
 

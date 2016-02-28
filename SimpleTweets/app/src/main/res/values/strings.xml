@@ -5,7 +5,9 @@
     <string name="login_label">Log in</string>
     <string name="title_activity_timeline">Home Timeline</string>
     <string name="title_activity_compose">ComposeActivity</string>
-
+    <string name="HOME_TIMELINE">1</string>
+    <string name="MENTIONS_TIMELINE">2</string>
+    <string name="USER_TIMELINE">3</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

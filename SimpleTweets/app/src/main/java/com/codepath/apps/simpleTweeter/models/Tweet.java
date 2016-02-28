@@ -1,5 +1,6 @@
 package com.codepath.apps.simpleTweeter.models;
 
+import android.content.Context;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 
@@ -7,6 +8,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.codepath.apps.simpleTweeter.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +30,9 @@ import java.util.List;
 public class Tweet extends Model {
     // Define database columns and associated fields
     // This is the unique id given by the server
-    @Column(name = "remote_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "remote_id")
     public long remoteId;
+
     @Column(name = "tweetId")
     String tweetId;
 
@@ -46,6 +49,27 @@ public class Tweet extends Model {
     @Column(name = "text")
     String text;
 
+    public String getRetweet_count() {
+        return retweet_count;
+    }
+
+    @Column(name = "retweet_count")
+    String retweet_count;
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Column(name="type")
+    String type;
+
+    @Column(name="id_type", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    public String id_type;
 
     public void setText(String text) {
         this.text = text;
@@ -103,13 +127,15 @@ public class Tweet extends Model {
     public Tweet() {
         super();
     }
-    public Tweet(JSONObject object){
+    public Tweet(JSONObject object,String type){
         super();
 
         try {
             this.remoteId = object.getLong("id");
+            this.id_type= this.remoteId+"_"+type;
             this.tweetId = object.getString("id_str");
             this.timestamp = object.getString("created_at");
+            this.retweet_count = object.getString("retweet_count");
             this.text = object.getString("text");
             long rId = object.getJSONObject("user").getLong("id"); // get just the remote id
             user = new Select().from(User.class).where("remote_id = ?", rId).executeSingle();
@@ -135,7 +161,7 @@ public class Tweet extends Model {
         }
     }
 
-    public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {
+    public static ArrayList<Tweet> fromJson(JSONArray jsonArray,String type) {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
 
         for (int i=0; i < jsonArray.length(); i++) {
@@ -147,7 +173,7 @@ public class Tweet extends Model {
                 continue;
             }
 
-            Tweet tweet = new Tweet(tweetJson);
+            Tweet tweet = new Tweet(tweetJson,type);
             tweet.save();
             tweets.add(tweet);
         }
@@ -155,12 +181,16 @@ public class Tweet extends Model {
         return tweets;
     }
 
-    public static List<Tweet> fetchAllHome() {
-        return new Select().from(Tweet.class).orderBy("timestamp DESC").execute();
+    public static List<Tweet> fetchAllHome(Context context) {
+        return new Select().from(Tweet.class).where("type = ?"+context.getResources().getString(R.string.HOME_TIMELINE)).orderBy("timestamp DESC").execute();
     }
 
 
-    public static List<Tweet> fetchAllMentions() {
-        return new Select().from(Tweet.class).orderBy("timestamp DESC").execute();
+    public static List<Tweet> fetchAllMentions(Context context) {
+        return new Select().from(Tweet.class).where("type = ?" + context.getResources().getString(R.string.MENTIONS_TIMELINE)).orderBy("timestamp DESC").execute();
+    }
+
+    public static List<Tweet> fetchAllUserTweets(Context context) {
+        return new Select().from(Tweet.class).where("type = ?" +context.getResources().getString( R.string.USER_TIMELINE)).orderBy("timestamp DESC").execute();
     }
 }

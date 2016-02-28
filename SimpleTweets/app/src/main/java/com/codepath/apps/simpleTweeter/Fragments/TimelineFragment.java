@@ -1,5 +1,7 @@
 package com.codepath.apps.simpleTweeter.Fragments;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -15,12 +17,14 @@ import android.widget.Toast;
 import com.activeandroid.util.Log;
 
 import com.codepath.apps.simpleTweeter.Activities.TimelinesActivity;
+import com.codepath.apps.simpleTweeter.AdapterCallBack;
 import com.codepath.apps.simpleTweeter.EndlessRecyclerOnScrollListener;
 import com.codepath.apps.simpleTweeter.R;
 import com.codepath.apps.simpleTweeter.TweeterClient;
 import com.codepath.apps.simpleTweeter.TwitterApplication;
 import com.codepath.apps.simpleTweeter.adapters.TweetAdapter;
 import com.codepath.apps.simpleTweeter.models.Tweet;
+import com.codepath.apps.simpleTweeter.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -36,12 +40,16 @@ import java.util.List;
 /**
  * Created by rakhe on 2/23/2016.
  */
-public class TimelineFragment extends Fragment {
+
+public class TimelineFragment extends Fragment  {
 
     // Interface to get tweets
     public interface ITweetsGetter{
         void populateTimeline(int page, AsyncHttpResponseHandler handler);
+        String getType();
     }
+
+
     public ITweetsGetter tweetsGetter;
 
     public static TimelineFragment newInstance(ITweetsGetter tweetsGetter) {
@@ -52,6 +60,7 @@ public class TimelineFragment extends Fragment {
 
     ArrayList<Tweet> tweets;
     TweetAdapter tweetAdapter;
+    ProgressDialog pDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,8 @@ public class TimelineFragment extends Fragment {
 
         //set up adapter
         tweets=new ArrayList<>();
-        tweets.addAll(Tweet.fetchAllHome()); //get all cached tweets
+        //default -- fetch page 0 tweets
+        tweets.addAll(Tweet.fetchAllHome(getContext())); //get all cached tweets
         tweetAdapter = new TweetAdapter(getContext(), tweets);
     }
 
@@ -110,65 +120,30 @@ public class TimelineFragment extends Fragment {
     }
 
     boolean inCall;
-    private void populateHomeTimeline(final int page) {
-        if (!inCall) {
-            if (!TimelinesActivity.isOnline()) {
-                Toast.makeText(getContext()
-                        , "Network unavailable. Try again later.",
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            inCall=true;
-            client.getHomeTimeline(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    // Response is automatically parsed into a JSONArray
-                    // json.getJSONObject(0).getLong("id");
-                    Log.i("DEBUG", "timeline: " + response.toString());
-                    if (page == 0) {
-                        tweets.clear();
-                    }
-                    System.out.println("loading more results" + page);
-                    tweets.addAll(Tweet.fromJson(response));
-                    tweetAdapter.notifyDataSetChanged();
-                    inCall = false;
-                    mSwipeContainer.setRefreshing(false);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    System.out.println("error:--------- " + errorResponse.toString());
-                    Log.e("DEBUG", "error:--------- " + errorResponse.toString());
-                    Toast.makeText(getContext(), "GET TIMELINE FAILED", Toast.LENGTH_LONG).show();
-                    try {
-                        Toast.makeText(getContext(),
-                                errorResponse.getString("message"),
-                                Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    inCall = false;
-                }
-
-                @Override
-                public void onUserException(Throwable error) {
-                    android.util.Log.d("debug", "eror" + error.getLocalizedMessage());
-                    error.printStackTrace();
-                    inCall = false;
-                }
-            }, page);
-        }
-    }
-
     private void populateTimeline(final int page) {
         inCall = false;
         if (!TimelinesActivity.isOnline()) {
             Toast.makeText(getContext()
                     , "Network unavailable. Try again later.",
                     Toast.LENGTH_LONG).show();
+            if (tweetsGetter != null){
+                switch( tweetsGetter.getType() ){
+                    //case getResources().getString(R.string.HOME_TIMELINE):tweets.addAll(Tweet.fetchAllHome(getContext()));
+                }
+            }
+
             return;
         }
+        // Create a progressbar
+        pDialog = new ProgressDialog(getContext());
+        // Set progressbar title
+        pDialog.setTitle("Fetching Tweets");
+        // Set progressbar message
+        pDialog.setMessage("Loading...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        // Show progressbar
+        pDialog.show();
         tweetsGetter.populateTimeline(page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -177,7 +152,7 @@ public class TimelineFragment extends Fragment {
                     tweets.clear();
                 }
                 System.out.println("loading more results" + page);
-                tweets.addAll(Tweet.fromJson(response));
+                tweets.addAll(Tweet.fromJson(response, tweetsGetter.getType()));
                 int curSize = tweetAdapter.getItemCount();
                 //tweetAdapter.notifyItemRangeInserted(curSize, tweets.size() - 1);
                 tweetAdapter.notifyDataSetChanged();
@@ -185,6 +160,7 @@ public class TimelineFragment extends Fragment {
                 // This is to ensure no infinite loop
                 inCall = (tweets.size() > 0);
                 mSwipeContainer.setRefreshing(false);
+                pDialog.dismiss();
             }
 
             @Override
@@ -193,6 +169,7 @@ public class TimelineFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed to get tweets", Toast.LENGTH_SHORT).show();
                 inCall = false;
                 mSwipeContainer.setRefreshing(false);
+                pDialog.dismiss();
             }
 
             @Override
@@ -201,6 +178,7 @@ public class TimelineFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed to get tweets", Toast.LENGTH_SHORT).show();
                 inCall = false;
                 mSwipeContainer.setRefreshing(false);
+                pDialog.dismiss();
             }
         });
     }

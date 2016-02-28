@@ -38,6 +38,9 @@
     android:text="~~handle"
     android:layout_marginTop="5dp"
     />
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/desc"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textContainer"
@@ -53,11 +56,13 @@
         android:layout_marginRight="10dp"
 
         >
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/etTweet"
         android:maxLength="140"
+
         />
 </android.support.design.widget.TextInputLayout>
 
@@ -71,7 +76,8 @@
     android:layout_below="@id/textContainer"
     android:onClick="submitTweet"
     android:background="@drawable/gradient_shape"
-    android:layout_marginBottom="20dp"/>
+    android:layout_marginBottom="20dp"
+    android:id="@+id/btnsubmit"/>
 
 
     <!--<android.support.design.widget.FloatingActionButton

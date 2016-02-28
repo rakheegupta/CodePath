@@ -4,25 +4,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.widget.Toast;
 
-import com.activeandroid.util.Log;
 import com.codepath.apps.simpleTweeter.Activities.TimelinesActivity;
 import com.codepath.apps.simpleTweeter.Activities.UserProfileActivity;
-import com.codepath.apps.simpleTweeter.Fragments.HomeFragment;
-import com.codepath.apps.simpleTweeter.Fragments.MentionsFragment;
-import com.codepath.apps.simpleTweeter.Fragments.TimelineFragment;
-import com.codepath.apps.simpleTweeter.TweeterClient;
-import com.codepath.apps.simpleTweeter.TwitterApplication;
-import com.codepath.apps.simpleTweeter.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 
 /**

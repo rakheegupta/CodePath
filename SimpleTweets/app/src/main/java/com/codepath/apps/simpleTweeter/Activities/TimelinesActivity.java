@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.activeandroid.util.Log;
 import com.bumptech.glide.Glide;
+import com.codepath.apps.simpleTweeter.AdapterCallBack;
 import com.codepath.apps.simpleTweeter.Fragments.TimelineFragment;
 import com.codepath.apps.simpleTweeter.R;
 import com.codepath.apps.simpleTweeter.TwitterApplication;
@@ -38,7 +39,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 /**
  * Created by rakhe on 2/17/2016.
  */
-public class TimelinesActivity extends AppCompatActivity {
+public class TimelinesActivity extends AppCompatActivity implements AdapterCallBack {
 
     User user;
 
@@ -82,11 +83,20 @@ public class TimelinesActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(TimelinesActivity.this, NewTweetActivity.class);
                 i.putExtra(EXTRA_ADD_TWEET_MESSAGE, Parcels.wrap(user));
+                i.putExtra("retweet",false);
                 startActivityForResult(i, ADD_MESSAGE_REQUEST_CODE);
             }
         });
 
 
+    }
+
+    @Override
+    public void onRetweetClicked(User user) {
+        Intent i = new Intent(this, NewTweetActivity.class);
+        i.putExtra(TimelinesActivity.EXTRA_ADD_TWEET_MESSAGE,Parcels.wrap(user));
+        i.putExtra("retweet",true);
+        startActivity(i);
     }
 
     private void setUpActionBar(){
@@ -188,7 +198,10 @@ public class TimelinesActivity extends AppCompatActivity {
                     //talk to timelineFragment
                     //FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     // Replace the contents of the container with the new fragment
-                    Tweet newTweet = new Tweet(response);
+                    Tweet newTweet = new Tweet(response,getResources().getString( R.string.HOME_TIMELINE));
+                    newTweet.save();
+                    Tweet newTweet1 = new Tweet(response,getResources().getString(R.string.USER_TIMELINE));
+                    newTweet1.save();
                     homeTimeline.addNewTweetToList(newTweet);
                     // ft.replace(R.id.your_placeholder, homeTimeline);
                     // or ft.add(R.id.your_placeholder, new FooFragment());
@@ -225,10 +238,13 @@ public class TimelinesActivity extends AppCompatActivity {
                             public void populateTimeline(int page, AsyncHttpResponseHandler handler) {
                                 TwitterApplication.getRestClient().getHomeTimeline(handler,page);
                             }
+                            public String getType(){
+                                return getResources().getString(R.string.HOME_TIMELINE);
+                            }
                         }
                 );
                 //TimelineFragment.newInstance(0);
-                //homeTimeline = HomeFragment.newInstance(0);
+
             }
 
             return homeTimeline;
@@ -239,6 +255,9 @@ public class TimelinesActivity extends AppCompatActivity {
                             @Override
                             public void populateTimeline(int page, AsyncHttpResponseHandler handler) {
                                 TwitterApplication.getRestClient().getMentionsTimeline(handler,page);
+                            }
+                            public String getType(){
+                                return getResources().getString(R.string.MENTIONS_TIMELINE);
                             }
                         }
                 );

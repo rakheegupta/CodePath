@@ -2,6 +2,7 @@ package com.codepath.apps.simpleTweeter.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.simpleTweeter.Activities.NewTweetActivity;
+import com.codepath.apps.simpleTweeter.Activities.TimelinesActivity;
 import com.codepath.apps.simpleTweeter.Activities.UserProfileActivity;
+import com.codepath.apps.simpleTweeter.AdapterCallBack;
+import com.codepath.apps.simpleTweeter.Fragments.TimelineFragment;
 import com.codepath.apps.simpleTweeter.R;
+import com.codepath.apps.simpleTweeter.TwitterApplication;
 import com.codepath.apps.simpleTweeter.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 
+import org.apache.http.Header;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -27,6 +36,13 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
+
+    public interface TweetsAdapterListener {
+        void onReplyClicked(String usersInfo, long in_reply_to_status_id);
+    }
+
+    TweetsAdapterListener listener;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView ivPhoto;
@@ -35,6 +51,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvTimeStamp;
         public TextView tvText;
         public ImageView ivMediaPhoto;
+        public ImageView ivRtweet;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -45,6 +62,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvTimeStamp =(TextView) itemView.findViewById(R.id.tvTiemStamp);
             tvText= (TextView) itemView.findViewById(R.id.tvText);
             ivMediaPhoto = (ImageView) itemView.findViewById(R.id.ivMedia);
+            ivRtweet = (ImageView) itemView.findViewById(R.id.ivRetweet);
         }
     }
 
@@ -54,6 +72,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public TweetAdapter(Context context, List<Tweet> tweets) {
         mContext = context;
         mTweets = tweets;
+
     }
 
     @Override
@@ -114,6 +133,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             viewHolder.ivMediaPhoto.setVisibility(View.GONE);
         }
 
+        //retweet
+        viewHolder.ivRtweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     // Return the total count of items

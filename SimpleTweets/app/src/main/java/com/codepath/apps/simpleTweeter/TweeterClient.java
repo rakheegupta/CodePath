@@ -115,4 +115,8 @@ public class TweeterClient extends OAuthBaseClient {
 		params.put("count",25);
 		client.get(apiURL,params,handler);
 	}
+	public void reTweet(String id, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl(String.format("statuses/retweet/%s.json", id));
+		client.post(apiUrl, handler);
+	}
 }

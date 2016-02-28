@@ -134,10 +134,13 @@ public class UserProfileActivity extends AppCompatActivity {
                             public void populateTimeline(int page, AsyncHttpResponseHandler handler) {
                                 TwitterApplication.getRestClient().getUserTimeline(user.getId1() ,page, handler);;
                             }
+                            public String getType(){
+                                return getResources().getString(R.string.USER_TIMELINE);
+                            }
                         }
                 );
                 //TimelineFragment.newInstance(0);
-                //homeTimeline = HomeFragment.newInstance(0);
+
             }
 
             return homeTimeline;
@@ -146,7 +149,7 @@ public class UserProfileActivity extends AppCompatActivity {
             if (favTimeline == null){
                 favTimeline = EmptyFragment.newInstance( );
                 //TimelineFragment.newInstance(0);
-                //homeTimeline = HomeFragment.newInstance(0);
+
             }
 
             return favTimeline;
