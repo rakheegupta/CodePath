@@ -119,4 +119,11 @@ public class TweeterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl(String.format("statuses/retweet/%s.json", id));
 		client.post(apiUrl, handler);
 	}
+
+	public void getSearchResults (String q, AsyncHttpResponseHandler handler){
+		String apiUrl =getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		params.put("q",q);
+		client.get(apiUrl, params, handler);
+	}
 }

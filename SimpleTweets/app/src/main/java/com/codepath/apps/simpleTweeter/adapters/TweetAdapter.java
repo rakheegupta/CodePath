@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.simpleTweeter.Activities.NewTweetActivity;
@@ -36,6 +37,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  */
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
+    AdapterCallBack onReplyClickedListener;
 
     public interface TweetsAdapterListener {
         void onReplyClicked(String usersInfo, long in_reply_to_status_id);
@@ -51,7 +53,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvTimeStamp;
         public TextView tvText;
         public ImageView ivMediaPhoto;
-        public ImageView ivRtweet;
+        public ImageView ivReply;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,17 +64,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvTimeStamp =(TextView) itemView.findViewById(R.id.tvTiemStamp);
             tvText= (TextView) itemView.findViewById(R.id.tvText);
             ivMediaPhoto = (ImageView) itemView.findViewById(R.id.ivMedia);
-            ivRtweet = (ImageView) itemView.findViewById(R.id.ivRetweet);
+            ivReply = (ImageView) itemView.findViewById(R.id.ivReply);
         }
     }
 
     private List< com.codepath.apps.simpleTweeter.models.Tweet> mTweets;
     Context mContext;
 
-    public TweetAdapter(Context context, List<Tweet> tweets) {
+    public TweetAdapter(Context context, List<Tweet> tweets, AdapterCallBack listener) {
         mContext = context;
         mTweets = tweets;
-
+        onReplyClickedListener = listener;
     }
 
     @Override
@@ -133,11 +135,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             viewHolder.ivMediaPhoto.setVisibility(View.GONE);
         }
 
-        //retweet
-        viewHolder.ivRtweet.setOnClickListener(new View.OnClickListener() {
+        //reply
+        viewHolder.ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Toast.makeText(mContext, "Inside onclick in adapter", Toast.LENGTH_SHORT).show();
+                onReplyClickedListener.onReplyClicked(tweet.getUser());
             }
         });
     }

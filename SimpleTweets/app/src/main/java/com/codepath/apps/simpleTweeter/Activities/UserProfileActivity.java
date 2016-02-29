@@ -38,7 +38,15 @@ import java.util.ArrayList;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity implements TimelineFragment.OnReplyClickedListener_Activity{
+    @Override
+    public void OnClick(User user) {
+        Toast.makeText(UserProfileActivity.this, "Inside onclick in activity", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this,NewTweetActivity.class);
+        i.putExtra(TimelinesActivity.EXTRA_ADD_TWEET_MESSAGE, Parcels.wrap(user));
+        i.putExtra("retweet",true);
+        startActivityForResult(i, TimelinesActivity.ADD_MESSAGE_REQUEST_CODE);
+    }
     TimelineFragment homeTimeline;
     Fragment favTimeline;
     User user;

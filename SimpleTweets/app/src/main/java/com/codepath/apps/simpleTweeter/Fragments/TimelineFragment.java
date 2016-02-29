@@ -1,5 +1,6 @@
 package com.codepath.apps.simpleTweeter.Fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +42,24 @@ import java.util.List;
  * Created by rakhe on 2/23/2016.
  */
 
-public class TimelineFragment extends Fragment  {
+public class TimelineFragment extends Fragment implements AdapterCallBack {
+    @Override
+    public void onReplyClicked(User user) {
+
+        //Toast.makeText(getContext(), "Inside onclick in fragment", Toast.LENGTH_SHORT).show();
+        listenerForActivity.OnClick(user);
+    }
+
+    public interface OnReplyClickedListener_Activity {
+        void OnClick(User user);
+    }
+    OnReplyClickedListener_Activity listenerForActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        listenerForActivity = (OnReplyClickedListener_Activity) activity;
+    }
 
     // Interface to get tweets
     public interface ITweetsGetter{
@@ -70,7 +88,7 @@ public class TimelineFragment extends Fragment  {
         tweets=new ArrayList<>();
         //default -- fetch page 0 tweets
         tweets.addAll(Tweet.fetchAllHome(getContext())); //get all cached tweets
-        tweetAdapter = new TweetAdapter(getContext(), tweets);
+        tweetAdapter = new TweetAdapter(getContext(), tweets,this);
     }
 
     TweeterClient client;

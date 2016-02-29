@@ -7,7 +7,7 @@ import com.codepath.apps.simpleTweeter.models.User;
  */
 public interface AdapterCallBack {
 
-        void onRetweetClicked(User user);
+        void onReplyClicked(User user);
 
 
 }

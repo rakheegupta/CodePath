@@ -93,8 +93,7 @@ public class User extends Model {
             this.name = object.getString("name");
             this.profile_image_url =object.getString("profile_image_url");
             this.screen_name =object.getString("screen_name");
-            this.profile_banner_url=object.getString("profile_banner_url");
-            this.profile_background_color=object.getString("profile_background_color");
+            this.profile_banner_url=object.has("profile_banner_url")?object.getString("profile_banner_url"):"";
             this.description=object.getString("description");
             this.followers_count=object.getString("followers_count");
             this.friends_count=object.getString("friends_count");
