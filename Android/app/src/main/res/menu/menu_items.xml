@@ -7,7 +7,7 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item android:id="@+id/login_fb"
-        android:title="F"
+        android:title="Login with facebook"
         android:icon="@drawable/ic_login_fb"
         app:showAsAction="ifRoom" />
 </menu>

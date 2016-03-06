@@ -47,6 +47,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import design.semicolon.modarenta.Manifest;
 import design.semicolon.modarenta.R;
@@ -80,8 +81,8 @@ public class MapFullScreenActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_full_screen);
-        //mItems =   Parcels.unwrap(getIntent().getParcelableExtra("items"));
-        mItems = Item.loadItems();
+        mItems =   Parcels.unwrap(getIntent().getParcelableExtra("items"));
+       // mItems = Item.loadItems();
 
         mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
         if (mapFragment != null) {
@@ -122,8 +123,15 @@ public class MapFullScreenActivity extends AppCompatActivity implements
         map = googleMap;
         if (map != null) {
             // Map is ready
+            /*final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    loadMarkersFromItems(mItems);
+                }
+            },1, 1000);*/
 
-            // Attach marker click listener to the map here
+                   // Attach marker click listener to the map here
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 public boolean onMarkerClick(Marker marker) {
                     // Handle marker click here
