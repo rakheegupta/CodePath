@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_home_acvtivity.xml",
+        "source": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\src\\main\\res\\menu\\menu_home_acvtivity.xml"
+    },
+    {
+        "merged": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_login_activity.xml",
+        "source": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\src\\main\\res\\menu\\menu_login_activity.xml"
+    },
+    {
+        "merged": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_items.xml",
+        "source": "C:\\Users\\rakhe\\Git\\CodePath\\Android\\app\\src\\main\\res\\menu\\menu_items.xml"
+    }
+]
